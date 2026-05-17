@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Côte — Burgers & Grillades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #6B1A1A;
+    --rouge-clair: #8B2222;
+    --brun: #3D1F0D;
+    --creme: #F5EDD8;
+    --or: #C9943A;
+    --charbon: #1A1208;
+    --fumee: #2C2010;
+    --texte: #2A1505;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--charbon);
+    color: var(--creme);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 48px;
+    background: linear-gradient(to bottom, rgba(26,18,8,0.97), transparent);
+    transition: background 0.3s;
+  }
+  nav.scrolled { background: rgba(26,18,8,0.98); box-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--or); letter-spacing: 2px; text-decoration: none; }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { color: var(--creme); text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--or); }
+
+  .nav-reserve {
+    background: var(--rouge); color: var(--creme);
+    padding: 10px 28px; border: none; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s; text-decoration: none;
+  }
+  .nav-reserve:hover { background: var(--rouge-clair); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    background: var(--charbon);
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(107,26,26,0.25) 0%, transparent 70%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9943A' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .ember {
+    position: absolute; border-radius: 50%;
+    animation: float-up linear infinite;
+    pointer-events: none;
+  }
+
+  @keyframes float-up {
+    0% { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-120vh) scale(0); opacity: 0; }
+  }
+
+  .hero-content { position: relative; text-align: center; padding: 0 20px; }
+
+  .hero-eyebrow {
+    font-size: 0.75rem; letter-spacing: 6px; text-transform: uppercase;
+    color: var(--or); margin-bottom: 24px;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-logo-img {
+    width: 340px; max-width: 80vw;
+    filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(-10deg) brightness(0.9);
+    margin-bottom: 32px;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-sub {
+    font-size: 1.25rem; font-weight: 300; letter-spacing: 3px;
+    color: rgba(245,237,216,0.7); margin-bottom: 48px;
+    animation: fadeUp 1s 0.4s ease both;
+  }
+
+  .hero-cta-group { display: flex; gap: 16px; justify-content: center; animation: fadeUp 1s 0.6s ease both; }
+
+  .btn-primary {
+    background: var(--rouge); color: var(--creme);
+    padding: 16px 40px; border: none; font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--rouge-clair); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent; color: var(--creme);
+    padding: 16px 40px; border: 1px solid rgba(245,237,216,0.4);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--or); color: var(--or); transform: translateY(-2px); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* DIVIDER */
+  .divider {
+    display: flex; align-items: center; gap: 20px;
+    padding: 0 48px; margin: 48px 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--or), transparent); }
+  .divider-icon { color: var(--or); font-size: 1.4rem; }
+
+  /* PLAT DU JOUR */
+  .plat-du-jour {
+    background: linear-gradient(135deg, var(--rouge) 0%, var(--brun) 100%);
+    padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
+  }
+  .plat-du-jour::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='rgba(201,148,58,0.08)' stroke-width='1'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+  .plat-label { font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; color: var(--or); margin-bottom: 12px; }
+  .plat-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 12px; }
+  .plat-desc { font-size: 1.1rem; font-weight: 300; color: rgba(245,237,216,0.8); max-width: 500px; margin: 0 auto 16px; }
+  .plat-price { font-size: 2rem; color: var(--or); font-style: italic; }
+
+  /* SECTIONS */
+  section { padding: 80px 48px; }
+
+  .section-label { font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; color: var(--or); margin-bottom: 12px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 32px; }
+
+  /* MENU */
+  #menu { background: var(--fumee); }
+  .menu-tabs { display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
+  .menu-tab {
+    padding: 10px 28px; border: 1px solid rgba(201,148,58,0.3); background: transparent;
+    color: var(--creme); font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .menu-tab.active, .menu-tab:hover { background: var(--or); border-color: var(--or); color: var(--charbon); }
+
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; }
+
+  .menu-item {
+    background: rgba(255,255,255,0.03); padding: 28px 32px;
+    border-left: 2px solid transparent; transition: all 0.3s;
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  }
+  .menu-item:hover { background: rgba(201,148,58,0.05); border-left-color: var(--or); }
+  .menu-item-info { flex: 1; }
+  .menu-item-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 6px; }
+  .menu-item-desc { font-size: 0.9rem; color: rgba(245,237,216,0.6); line-height: 1.5; }
+  .menu-item-badge { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; background: var(--rouge); padding: 3px 8px; color: var(--creme); margin-top: 8px; display: inline-block; }
+  .menu-item-price { font-size: 1.3rem; color: var(--or); white-space: nowrap; font-style: italic; }
+
+  /* GALERIE */
+  #galerie { background: var(--charbon); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 280px 280px;
+    gap: 4px; margin-top: 32px;
+  }
+  .gallery-item {
+    overflow: hidden; position: relative;
+    background: var(--fumee);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gallery-item:first-child { grid-row: span 2; }
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-size: 2.5rem; color: rgba(201,148,58,0.3);
+    gap: 12px;
+  }
+  .gallery-placeholder span { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.3); }
+
+  /* RÉSERVATION */
+  #reservation { background: var(--brun); text-align: center; }
+  .zenchef-container {
+    max-width: 700px; margin: 0 auto;
+    background: rgba(0,0,0,0.2); padding: 48px;
+    border: 1px solid rgba(201,148,58,0.2);
+  }
+  .zenchef-info { margin-bottom: 32px; }
+  .zenchef-info p { font-size: 1.1rem; color: rgba(245,237,216,0.75); line-height: 1.8; margin-bottom: 24px; }
+  .zenchef-btn {
+    display: inline-block;
+    background: var(--or); color: var(--charbon);
+    padding: 20px 52px; font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; letter-spacing: 2px;
+    text-decoration: none; transition: all 0.3s;
+    font-style: italic;
+  }
+  .zenchef-btn:hover { background: var(--creme); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+
+  /* FOOTER */
+  footer {
+    background: var(--charbon); border-top: 1px solid rgba(201,148,58,0.15);
+    padding: 48px; text-align: center;
+  }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--or); margin-bottom: 16px; font-style: italic; }
+  .footer-info { font-size: 0.9rem; color: rgba(245,237,216,0.5); line-height: 2; }
+  .footer-info a { color: var(--or); text-decoration: none; }
+  .admin-link { margin-top: 32px; }
+  .admin-link a { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.2); text-decoration: none; transition: color 0.3s; }
+  .admin-link a:hover { color: rgba(245,237,216,0.5); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    section { padding: 60px 20px; }
+    .section-title { font-size: 2rem; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
+    .gallery-item:first-child { grid-row: span 1; grid-column: span 2; }
+    .plat-du-jour { padding: 48px 20px; }
+    .plat-title { font-size: 2rem; }
+    .zenchef-container { padding: 28px 20px; }
+    .hero-cta-group { flex-direction: column; align-items: center; }
+  }
+
+  /* MODAL ADMIN */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 2000;
+    background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--fumee); border: 1px solid var(--or);
+    padding: 48px; max-width: 460px; width: 90%;
+    animation: fadeUp 0.3s ease;
+  }
+  .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--or); margin-bottom: 8px; }
+  .modal p { font-size: 0.9rem; color: rgba(245,237,216,0.6); margin-bottom: 28px; }
+  .form-group { margin-bottom: 20px; }
+  .form-group label { display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,237,216,0.6); margin-bottom: 8px; }
+  .form-group input {
+    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,148,58,0.3);
+    color: var(--creme); padding: 12px 16px; font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    outline: none; transition: border-color 0.3s;
+  }
+  .form-group input:focus { border-color: var(--or); }
+  .modal-btns { display: flex; gap: 12px; margin-top: 28px; }
+  .btn-modal-confirm {
+    flex: 1; background: var(--rouge); color: var(--creme); border: none;
+    padding: 14px; font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+  }
+  .btn-modal-confirm:hover { background: var(--rouge-clair); }
+  .btn-modal-cancel {
+    padding: 14px 20px; background: transparent; border: 1px solid rgba(245,237,216,0.2);
+    color: rgba(245,237,216,0.5); font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .btn-modal-cancel:hover { border-color: rgba(245,237,216,0.5); color: var(--creme); }
+  .error-msg { color: #e74c3c; font-size: 0.85rem; margin-top: 8px; display: none; }
+
+  /* Flammes animation hero */
+  .flame-container { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; pointer-events: none; }
+  .flame { width: 3px; background: linear-gradient(to top, var(--or), var(--rouge), transparent); animation: flicker 2s ease-in-out infinite alternate; border-radius: 50%; }
+  @keyframes flicker { 0% { height: 40px; opacity: 0.3; } 100% { height: 80px; opacity: 0.7; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">La Côte</a>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#reservation">Réservation</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#reservation" class="nav-reserve">Réserver</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div id="embers"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Burgers &amp; Grillades au feu de bois</div>
+    <img src="logo.png" alt="La Côte" class="hero-logo-img" id="heroLogo">
+    <p class="hero-sub">Fumée · Caractère · Authenticité</p>
+    <div class="hero-cta-group">
+      <a href="#menu" class="btn-primary">Découvrir le menu</a>
+      <a href="#reservation" class="btn-outline">Réserver une table</a>
+    </div>
+  </div>
+  <div class="flame-container" id="flames"></div>
+</section>
+
+<!-- PLAT DU JOUR -->
+<div class="plat-du-jour" id="platDuJour">
+  <div class="plat-label">✦ Aujourd'hui ✦</div>
+  <div class="plat-title" id="platName">Côte de Bœuf Pujadas</div>
+  <div class="plat-desc" id="platDesc">Grillade au barbecue Pujadas, beurre maître d'hôtel, gratin dauphinois maison</div>
+  <div class="plat-price" id="platPrice">28€</div>
+</div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="section-label">Notre carte</div>
+  <h2 class="section-title">Le Menu</h2>
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="filterMenu('burgers')">Burgers</button>
+    <button class="menu-tab" onclick="filterMenu('grillades')">Grillades</button>
+    <button class="menu-tab" onclick="filterMenu('entrees')">Entrées</button>
+    <button class="menu-tab" onclick="filterMenu('desserts')">Desserts</button>
+    <button class="menu-tab" onclick="filterMenu('boissons')">Boissons</button>
+  </div>
+  <div class="menu-grid" id="menuGrid"></div>
+</section>
+
+<!-- GALERIE -->
+<section id="galerie">
+  <div class="section-label">En images</div>
+  <h2 class="section-title">La Côte en images</h2>
+  <div class="gallery-grid" id="galleryGrid">
+    <div class="gallery-item">
+      <div class="gallery-placeholder">🔥<span>Grillades</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">🍔<span>Burgers</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">🥩<span>Viandes</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">🍷<span>Ambiance</span></div>
+    </div>
+    <div class="gallery-item">
+      <div class="gallery-placeholder">🌿<span>Terrasse</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- RÉSERVATION -->
+<section id="reservation">
+  <div class="section-label">Table</div>
+  <h2 class="section-title" style="text-align:center">Réserver votre table</h2>
+  <div class="zenchef-container">
+    <div class="zenchef-info">
+      <p>Réservez directement en ligne via notre partenaire <strong>Zenchef</strong> — confirmez votre table en quelques clics, 24h/24.</p>
+    </div>
+    <!-- Widget Zenchef — remplacez l'URL par votre identifiant Zenchef -->
+    <a href="https://www.zenchef.com/lacote" target="_blank" class="zenchef-btn" id="zenchefBtn">
+      🗓 Réserver ma table
+    </a>
+    <p style="margin-top: 20px; font-size:0.8rem; color:rgba(245,237,216,0.4); letter-spacing:1px;">
+      Ou appelez-nous au <a href="tel:+33000000000" style="color:var(--or)">00 00 00 00 00</a>
+    </p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="background:var(--fumee); text-align:center;">
+  <div class="section-label">Nous trouver</div>
+  <h2 class="section-title">Contact &amp; Horaires</h2>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px; max-width:800px; margin:0 auto; text-align:left;">
+    <div>
+      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Adresse</div>
+      <p style="line-height:2; color:rgba(245,237,216,0.75);" id="contactAdresse">123 Rue du Marché<br>Marseille, France</p>
+    </div>
+    <div>
+      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Horaires</div>
+      <p style="line-height:2; color:rgba(245,237,216,0.75);" id="contactHoraires">Lun–Sam : 12h – 14h30<br>Lun–Sam : 19h – 22h30<br>Dimanche : Fermé</p>
+    </div>
+    <div>
+      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Contact</div>
+      <p style="line-height:2; color:rgba(245,237,216,0.75);">
+        <a href="tel:+33000000000" style="color:var(--or)">00 00 00 00 00</a><br>
+        <a href="mailto:contact@lacote.fr" style="color:var(--or)">contact@lacote.fr</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">La Côte</div>
+  <div class="footer-info">
+    Burgers &amp; Grillades au Barbecue Pujadas<br>
+    Marseille, France<br>
+    <a href="tel:+33000000000">00 00 00 00 00</a>
+  </div>
+  <div class="admin-link">
+    <a href="admin.html">⚙ Espace Administration</a>
+  </div>
+</footer>
+
+<!-- MODAL LOGIN -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal">
+    <h2>Administration</h2>
+    <p>Accès réservé au personnel du restaurant.</p>
+    <div class="form-group">
+      <label>Identifiant</label>
+      <input type="text" id="loginUser" placeholder="admin">
+    </div>
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input type="password" id="loginPass" placeholder="••••••">
+      <div class="error-msg" id="loginError">Identifiants incorrects.</div>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal-confirm" onclick="doLogin()">Se connecter</button>
+      <button class="btn-modal-cancel" onclick="closeModal()">Annuler</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — stocké en localStorage (remplaçable par API backend)
+// ============================================================
+const DEFAULT_MENU = {
+  burgers: [
+    { name: "La Côte Burger", desc: "Bœuf Charolais, cheddar affiné, sauce maison, oignons confits", price: "16€", badge: "Signature" },
+    { name: "BBQ Pujadas", desc: "Double patty, bacon fumé, sauce BBQ maison, pickles", price: "18€" },
+    { name: "Le Veggie", desc: "Galette de légumes grillés, avocat, pesto, roquette", price: "14€" },
+    { name: "Truffe & Comté", desc: "Bœuf Wagyu, copeaux de truffe, Comté 18 mois", price: "24€", badge: "Premium" },
+  ],
+  grillades: [
+    { name: "Côte de Bœuf", desc: "800g, grillade Pujadas, beurre maître d'hôtel, pour 2 personnes", price: "52€", badge: "Pour 2" },
+    { name: "Entrecôte", desc: "Grillade Pujadas, sauce au poivre ou béarnaise, frites maison", price: "26€" },
+    { name: "Poulet Fermier", desc: "Demi-poulet fermier, marinade citron-herbes, grillé au charbon", price: "19€" },
+    { name: "Côtelettes d'Agneau", desc: "Rack d'agneau, croûte de persil, jus au thym", price: "28€", badge: "Spécialité" },
+  ],
+  entrees: [
+    { name: "Burrata & Tomates", desc: "Burrata crémeuse, tomates anciennes, basilic frais, huile d'olive", price: "11€" },
+    { name: "Os à Moelle", desc: "Os à moelle rôti, persillade, pain grillé au charbon", price: "9€" },
+    { name: "Salade César", desc: "Romaine, poulet grillé, parmesan, croûtons maison", price: "13€" },
+  ],
+  desserts: [
+    { name: "Fondant Chocolat", desc: "Cœur coulant, glace vanille Bourbon, pralin", price: "8€" },
+    { name: "Crème Brûlée", desc: "Vanille de Madagascar, caramel à la cassonade", price: "7€" },
+    { name: "Tarte Tatin", desc: "Pommes caramélisées, pâte feuilletée, crème fraîche", price: "8€" },
+  ],
+  boissons: [
+    { name: "Sélection Vins", desc: "Rouge, blanc, rosé — demandez notre carte des vins", price: "à partir de 5€" },
+    { name: "Bières Artisanales", desc: "Sélection locale, blonde, brune, IPA", price: "4–6€" },
+    { name: "Limonades Maison", desc: "Citron-gingembre, fraise-basilic, menthe-concombre", price: "4€" },
+  ]
+};
+
+const DEFAULT_PLAT = { name: "Côte de Bœuf Pujadas", desc: "Grillade au barbecue Pujadas, beurre maître d'hôtel, gratin dauphinois maison", price: "28€" };
+
+function getData(key, def) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
+  catch { return def; }
+}
+
+// ============================================================
+// RENDER MENU
+// ============================================================
+let currentCat = 'burgers';
+function filterMenu(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.menu-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['burgers','grillades','entrees','desserts','boissons'][i] === cat);
+  });
+  renderMenu();
+}
+function renderMenu() {
+  const menu = getData('lacote_menu', DEFAULT_MENU);
+  const items = menu[currentCat] || [];
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = items.map(item => `
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">${item.name}</div>
+        <div class="menu-item-desc">${item.desc}</div>
+        ${item.badge ? `<span class="menu-item-badge">${item.badge}</span>` : ''}
+      </div>
+      <div class="menu-item-price">${item.price}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// PLAT DU JOUR
+// ============================================================
+function renderPlat() {
+  const plat = getData('lacote_plat', DEFAULT_PLAT);
+  document.getElementById('platName').textContent = plat.name;
+  document.getElementById('platDesc').textContent = plat.desc;
+  document.getElementById('platPrice').textContent = plat.price;
+}
+
+// ============================================================
+// GALLERY
+// ============================================================
+function renderGallery() {
+  const photos = getData('lacote_gallery', []);
+  const grid = document.getElementById('galleryGrid');
+  const placeholders = [
+    { icon:'🔥', label:'Grillades' }, { icon:'🍔', label:'Burgers' },
+    { icon:'🥩', label:'Viandes' }, { icon:'🍷', label:'Ambiance' },
+    { icon:'🌿', label:'Terrasse' }
+  ];
+  grid.innerHTML = placeholders.map((p, i) => {
+    const photo = photos[i];
+    return `<div class="gallery-item">
+      ${photo ? `<img src="${photo}" alt="Photo ${i+1}">` : `<div class="gallery-placeholder">${p.icon}<span>${p.label}</span></div>`}
+    </div>`;
+  }).join('');
+}
+
+// ============================================================
+// LOGO
+// ============================================================
+function loadLogo() {
+  const logoB64 = getData('lacote_logo', null);
+  if (logoB64) document.getElementById('heroLogo').src = logoB64;
+}
+
+// ============================================================
+// EMBERS ANIMATION
+// ============================================================
+function createEmbers() {
+  const container = document.getElementById('embers');
+  setInterval(() => {
+    const e = document.createElement('div');
+    e.className = 'ember';
+    const size = Math.random() * 4 + 2;
+    e.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}vw; bottom:0;
+      background:${Math.random()>0.5?'var(--or)':'var(--rouge)'};
+      animation-duration:${Math.random()*4+3}s;
+      opacity:${Math.random()*0.6+0.2};
+    `;
+    container.appendChild(e);
+    setTimeout(() => e.remove(), 7000);
+  }, 300);
+}
+
+// ============================================================
+// FLAMES
+// ============================================================
+function createFlames() {
+  const c = document.getElementById('flames');
+  for(let i=0;i<30;i++){
+    const f=document.createElement('div');
+    f.className='flame';
+    f.style.cssText=`height:${Math.random()*60+20}px;animation-delay:${Math.random()*2}s;animation-duration:${Math.random()*1.5+1}s;opacity:${Math.random()*0.4+0.1}`;
+    c.appendChild(f);
+  }
+}
+
+// ============================================================
+// NAVBAR SCROLL
+// ============================================================
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ============================================================
+// LOGIN MODAL
+// ============================================================
+function openAdminModal() { document.getElementById('adminModal').classList.add('open'); }
+function closeModal() { document.getElementById('adminModal').classList.remove('open'); document.getElementById('loginError').style.display='none'; }
+function doLogin() {
+  const user = document.getElementById('loginUser').value;
+  const pass = document.getElementById('loginPass').value;
+  const creds = getData('lacote_admin_creds', { user: 'admin', pass: 'lacote2024' });
+  if(user === creds.user && pass === creds.pass) {
+    localStorage.setItem('lacote_auth', '1');
+    window.location.href = 'admin.html';
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+
+document.querySelector('.admin-link a').addEventListener('click', e => {
+  e.preventDefault();
+  if(localStorage.getItem('lacote_auth') === '1') window.location.href = 'admin.html';
+  else openAdminModal();
+});
+
+document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('adminModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
+
+// ============================================================
+// ZENCHEF — remplacez l'URL par votre identifiant
+// ============================================================
+function setupZenchef() {
+  const zid = getData('lacote_zenchef_url', 'https://www.zenchef.com/lacote');
+  document.getElementById('zenchefBtn').href = zid;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  renderPlat();
+  renderMenu();
+  renderGallery();
+  loadLogo();
+  createEmbers();
+  createFlames();
+  setupZenchef();
+});
+</script>
+</body>
+</html>
