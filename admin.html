@@ -4,194 +4,157 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>La Côte — Administration</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=Cormorant+Garamond:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --rouge: #6B1A1A; --rouge-clair: #8B2222; --brun: #3D1F0D;
-    --creme: #F5EDD8; --or: #C9943A; --charbon: #1A1208; --fumee: #2C2010;
-    --success: #2ecc71; --danger: #e74c3c; --warning: #f39c12;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body { font-family: 'Cormorant Garamond', serif; background: #111; color: var(--creme); display: flex; min-height: 100vh; }
+:root{
+  --creme:#F2EBD9;--creme-alt:#EDE4CE;--brun:#5C2218;--brun-clair:#7A3225;
+  --brun-pale:#C4A882;--texte:#2E1A10;--texte-doux:#7A6450;--blanc:#FDFAF4;
+  --noir:#1A0F08;--success:#2e7d55;--danger:#b72b2b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte);display:flex;min-height:100vh;}
 
-  /* SIDEBAR */
-  .sidebar {
-    width: 260px; background: var(--charbon); border-right: 1px solid rgba(201,148,58,0.15);
-    display: flex; flex-direction: column; padding: 32px 0; position: fixed; top: 0; bottom: 0; left: 0; z-index: 100;
-  }
-  .sidebar-logo { padding: 0 28px 32px; border-bottom: 1px solid rgba(201,148,58,0.15); }
-  .sidebar-logo a { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--or); font-style: italic; text-decoration: none; }
-  .sidebar-logo .sub { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.3); margin-top: 4px; }
+/* SIDEBAR */
+.sidebar{width:252px;background:var(--blanc);border-right:1px solid rgba(92,34,24,0.1);display:flex;flex-direction:column;padding:0;position:fixed;top:0;bottom:0;left:0;z-index:100;}
+.sidebar-header{padding:28px 28px 24px;border-bottom:1px solid rgba(92,34,24,0.1);}
+.sidebar-logo{font-family:'Libre Baskerville',serif;font-size:1.3rem;font-style:italic;color:var(--brun);text-decoration:none;display:block;}
+.sidebar-sub{font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--texte-doux);margin-top:4px;}
+.sidebar-nav{flex:1;padding:16px 0;overflow-y:auto;}
+.nav-group-label{padding:12px 24px 6px;font-family:'Jost',sans-serif;font-size:0.55rem;letter-spacing:3px;text-transform:uppercase;color:rgba(92,34,24,0.35);}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 24px;color:var(--texte-doux);cursor:pointer;transition:all 0.2s;font-family:'Cormorant',serif;font-size:1rem;border-left:2px solid transparent;}
+.nav-item:hover{color:var(--brun);background:rgba(92,34,24,0.04);}
+.nav-item.active{color:var(--brun);border-left-color:var(--brun);background:rgba(92,34,24,0.06);}
+.nav-icon{font-size:1rem;width:18px;text-align:center;}
+.sidebar-footer{padding:16px 24px;border-top:1px solid rgba(92,34,24,0.1);display:flex;justify-content:space-between;align-items:center;}
+.admin-badge{font-family:'Jost',sans-serif;font-size:0.62rem;color:var(--texte-doux);}
+.logout-btn{background:none;border:none;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:1px;text-transform:uppercase;color:rgba(92,34,24,0.4);cursor:pointer;transition:color 0.2s;}
+.logout-btn:hover{color:var(--danger);}
 
-  .sidebar-nav { flex: 1; padding: 20px 0; }
-  .nav-section { padding: 12px 28px 6px; font-size: 0.6rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.25); }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 28px; color: rgba(245,237,216,0.6);
-    cursor: pointer; transition: all 0.2s; font-size: 0.95rem;
-    border-left: 2px solid transparent;
-  }
-  .nav-item:hover { color: var(--creme); background: rgba(255,255,255,0.04); }
-  .nav-item.active { color: var(--or); border-left-color: var(--or); background: rgba(201,148,58,0.08); }
-  .nav-icon { font-size: 1.1rem; width: 20px; text-align: center; }
+/* MAIN */
+.main{margin-left:252px;flex:1;padding:48px 52px;min-height:100vh;}
 
-  .sidebar-footer {
-    padding: 20px 28px; border-top: 1px solid rgba(201,148,58,0.15);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .admin-badge { font-size: 0.75rem; color: rgba(245,237,216,0.4); }
-  .logout-btn {
-    background: none; border: none; color: rgba(245,237,216,0.3); cursor: pointer;
-    font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s;
-  }
-  .logout-btn:hover { color: var(--danger); }
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
 
-  /* MAIN */
-  .main { margin-left: 260px; flex: 1; padding: 40px; min-height: 100vh; }
+/* PAGE HEADER */
+.page-header{margin-bottom:36px;padding-bottom:28px;border-bottom:1px solid rgba(92,34,24,0.1);}
+.page-title{font-family:'Libre Baskerville',serif;font-size:2rem;color:var(--brun);font-style:italic;}
+.page-sub{font-family:'Cormorant',serif;font-size:1rem;color:var(--texte-doux);margin-top:6px;}
 
-  /* PANELS */
-  .panel { display: none; }
-  .panel.active { display: block; }
+/* CARDS */
+.card{background:var(--blanc);border:1px solid rgba(92,34,24,0.1);padding:32px;margin-bottom:20px;box-shadow:0 2px 20px rgba(0,0,0,0.04);}
+.card-title{font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:var(--brun);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(92,34,24,0.1);}
+.card-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid rgba(92,34,24,0.1);}
+.card-title-row .card-title{margin-bottom:0;padding-bottom:0;border-bottom:none;}
 
-  .page-header { margin-bottom: 36px; }
-  .page-title { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--creme); }
-  .page-sub { font-size: 0.9rem; color: rgba(245,237,216,0.4); margin-top: 6px; }
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--blanc);border:1px solid rgba(92,34,24,0.1);padding:28px 24px;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,0.04);}
+.stat-value{font-family:'Libre Baskerville',serif;font-size:2.2rem;color:var(--brun);}
+.stat-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--texte-doux);margin-top:6px;}
 
-  /* CARDS */
-  .card {
-    background: var(--fumee); border: 1px solid rgba(201,148,58,0.15);
-    padding: 28px; margin-bottom: 20px;
-  }
-  .card-title {
-    font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--or); margin-bottom: 20px; padding-bottom: 12px;
-    border-bottom: 1px solid rgba(201,148,58,0.15);
-  }
+/* FORMS */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:16px;}
+.form-group label{display:block;font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--texte-doux);margin-bottom:8px;}
+.form-group input,.form-group textarea,.form-group select{width:100%;border:1px solid rgba(92,34,24,0.2);background:var(--creme);color:var(--texte);padding:11px 14px;font-family:'Cormorant',serif;font-size:1rem;outline:none;transition:border-color 0.25s;resize:vertical;}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--brun);}
+.form-group select option{background:var(--blanc);}
 
-  /* FORMS */
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .form-group { margin-bottom: 16px; }
-  .form-group label { display: block; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,237,216,0.5); margin-bottom: 8px; }
-  .form-group input, .form-group textarea, .form-group select {
-    width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(201,148,58,0.2);
-    color: var(--creme); padding: 11px 14px; font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    outline: none; transition: border-color 0.3s; resize: vertical;
-  }
-  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--or); }
-  .form-group select option { background: var(--fumee); }
+/* BUTTONS */
+.btn{padding:10px 22px;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;border-radius:2px;}
+.btn-primary{background:var(--brun);color:#FDFAF4;}.btn-primary:hover{background:var(--brun-clair);}
+.btn-or{background:var(--brun-pale);color:var(--noir);}.btn-or:hover{background:#d4b898;}
+.btn-danger{background:rgba(183,43,43,0.08);color:var(--danger);border:1px solid rgba(183,43,43,0.2);}.btn-danger:hover{background:rgba(183,43,43,0.15);}
+.btn-ghost{background:transparent;color:var(--texte-doux);border:1px solid rgba(92,34,24,0.2);}.btn-ghost:hover{border-color:var(--brun);color:var(--brun);}
+.btn-sm{padding:6px 14px;font-size:0.62rem;}
+.btn-link{background:none;border:none;color:var(--brun);font-family:'Cormorant',serif;font-size:1rem;cursor:pointer;text-decoration:underline;padding:0;}
 
-  /* BUTTONS */
-  .btn { padding: 11px 24px; border: none; cursor: pointer; font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-  .btn-primary { background: var(--rouge); color: var(--creme); }
-  .btn-primary:hover { background: var(--rouge-clair); }
-  .btn-or { background: var(--or); color: var(--charbon); }
-  .btn-or:hover { background: #d9a84a; }
-  .btn-danger { background: rgba(231,76,60,0.15); color: var(--danger); border: 1px solid rgba(231,76,60,0.3); }
-  .btn-danger:hover { background: rgba(231,76,60,0.25); }
-  .btn-ghost { background: transparent; color: rgba(245,237,216,0.6); border: 1px solid rgba(245,237,216,0.15); }
-  .btn-ghost:hover { border-color: rgba(245,237,216,0.4); color: var(--creme); }
-  .btn-sm { padding: 7px 14px; font-size: 0.78rem; }
+/* ALERT */
+.alert{padding:13px 18px;margin-bottom:20px;font-family:'Jost',sans-serif;font-size:0.75rem;letter-spacing:1px;display:none;border-radius:2px;}
+.alert.success{background:rgba(46,125,85,0.08);border:1px solid rgba(46,125,85,0.25);color:var(--success);}
+.alert.error{background:rgba(183,43,43,0.08);border:1px solid rgba(183,43,43,0.25);color:var(--danger);}
 
-  /* ALERT */
-  .alert { padding: 14px 18px; margin-bottom: 20px; font-size: 0.9rem; display: none; }
-  .alert.success { background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3); color: var(--success); }
-  .alert.error { background: rgba(231,76,60,0.1); border: 1px solid rgba(231,76,60,0.3); color: var(--danger); }
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;}
+.data-table th{text-align:left;font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:3px;text-transform:uppercase;color:var(--texte-doux);padding:10px 14px;border-bottom:1px solid rgba(92,34,24,0.1);}
+.data-table td{padding:14px;border-bottom:1px solid rgba(92,34,24,0.06);font-family:'Cormorant',serif;font-size:1rem;vertical-align:top;}
+.data-table tr:last-child td{border-bottom:none;}
+.data-table tr:hover td{background:rgba(92,34,24,0.02);}
+.item-name{font-family:'Libre Baskerville',serif;font-size:1rem;color:var(--texte);}
+.item-desc{font-size:0.9rem;color:var(--texte-doux);line-height:1.5;margin-top:3px;}
+.item-price{color:var(--brun);font-style:italic;white-space:nowrap;}
+.badge{font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border:1px solid rgba(92,34,24,0.3);color:var(--brun);display:inline-block;}
+.actions{display:flex;gap:6px;white-space:nowrap;}
 
-  /* STATS */
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-  .stat-card { background: var(--fumee); border: 1px solid rgba(201,148,58,0.15); padding: 24px; text-align: center; }
-  .stat-value { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--or); }
-  .stat-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,237,216,0.4); margin-top: 6px; }
+/* MENU FILTER TABS */
+.filter-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid rgba(92,34,24,0.14);}
+.filter-tab{padding:10px 20px;background:transparent;border:none;font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--texte-doux);cursor:pointer;transition:all 0.2s;border-bottom:2px solid transparent;margin-bottom:-1px;}
+.filter-tab:hover{color:var(--brun);}
+.filter-tab.active{color:var(--brun);border-bottom-color:var(--brun);}
 
-  /* MENU TABLE */
-  .menu-table { width: 100%; border-collapse: collapse; }
-  .menu-table th { text-align: left; font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.4); padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .menu-table td { padding: 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
-  .menu-table tr:last-child td { border-bottom: none; }
-  .menu-table tr:hover td { background: rgba(255,255,255,0.02); }
-  .item-name { font-family: 'Playfair Display', serif; font-size: 1rem; }
-  .item-desc { font-size: 0.85rem; color: rgba(245,237,216,0.55); line-height: 1.5; margin-top: 3px; }
-  .item-price-cell { color: var(--or); font-style: italic; white-space: nowrap; }
-  .badge { font-size: 0.6rem; letter-spacing: 1px; text-transform: uppercase; padding: 2px 7px; background: var(--rouge); color: var(--creme); display: inline-block; }
+/* PHOTO GRID */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.photo-slot{aspect-ratio:4/3;border:1.5px dashed rgba(92,34,24,0.22);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;background:var(--creme);}
+.photo-slot:hover{border-color:var(--brun);}
+.photo-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.photo-slot .overlay{position:absolute;inset:0;background:rgba(30,15,5,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.photo-slot:hover .overlay{opacity:1;}
+.slot-icon{font-size:1.8rem;opacity:0.2;margin-bottom:8px;}
+.slot-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:var(--texte-doux);opacity:0.6;}
+.photo-slot input[type=file]{display:none;}
 
-  .actions { display: flex; gap: 6px; white-space: nowrap; }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(30,15,5,0.65);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--blanc);border:1px solid rgba(92,34,24,0.15);padding:44px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 80px rgba(0,0,0,0.12);animation:fadeUp 0.3s ease;}
+.modal h3{font-family:'Libre Baskerville',serif;font-size:1.5rem;color:var(--brun);font-style:italic;margin-bottom:24px;}
+.modal-btns{display:flex;gap:10px;margin-top:20px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
 
-  /* GALLERY UPLOAD */
-  .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .photo-slot {
-    aspect-ratio: 4/3; border: 2px dashed rgba(201,148,58,0.25);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; background: rgba(255,255,255,0.02);
-  }
-  .photo-slot:hover { border-color: var(--or); }
-  .photo-slot img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .photo-slot .overlay {
-    position: absolute; inset: 0; background: rgba(0,0,0,0.5);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    opacity: 0; transition: opacity 0.2s;
-  }
-  .photo-slot:hover .overlay { opacity: 1; }
-  .photo-slot .upload-hint { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,237,216,0.4); margin-top: 8px; }
-  .photo-slot .slot-icon { font-size: 2rem; color: rgba(201,148,58,0.3); }
-  .photo-slot input[type=file] { display: none; }
+/* QUICK ACCESS */
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:4px;}
+.quick-card{background:var(--creme);border:1px solid rgba(92,34,24,0.1);padding:22px;cursor:pointer;transition:all 0.2s;text-decoration:none;}
+.quick-card:hover{border-color:var(--brun);transform:translateY(-2px);}
+.quick-icon{font-size:1.6rem;margin-bottom:10px;}
+.quick-label{font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--brun);}
+.quick-sub{font-family:'Cormorant',serif;font-size:0.9rem;color:var(--texte-doux);margin-top:4px;}
 
-  /* EDIT MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--fumee); border: 1px solid rgba(201,148,58,0.3); padding: 40px; max-width: 520px; width: 90%; max-height: 90vh; overflow-y: auto; }
-  .modal h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--or); margin-bottom: 24px; }
-  .modal-btns { display: flex; gap: 10px; margin-top: 24px; }
-
-  /* RESPONSIVE */
-  @media(max-width:900px) {
-    .sidebar { width: 200px; }
-    .main { margin-left: 200px; padding: 24px; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-  }
-  @media(max-width:650px) {
-    .sidebar { display: none; }
-    .main { margin-left: 0; }
-    .photo-grid { grid-template-columns: 1fr 1fr; }
-  }
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{width:200px;}.main{margin-left:200px;padding:28px 24px;}
+  .stats-grid{grid-template-columns:1fr 1fr;}.form-row{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:640px){
+  .sidebar{display:none;}.main{margin-left:0;}
+}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <aside class="sidebar">
-  <div class="sidebar-logo">
-    <a href="index.html">La Côte</a>
-    <div class="sub">Administration</div>
+  <div class="sidebar-header">
+    <a href="index.html" class="sidebar-logo">La côte</a>
+    <div class="sidebar-sub">Administration</div>
   </div>
   <nav class="sidebar-nav">
-    <div class="nav-section">Tableau de bord</div>
-    <div class="nav-item active" onclick="showPanel('dashboard')">
-      <span class="nav-icon">📊</span> Dashboard
-    </div>
+    <div class="nav-group-label">Tableau de bord</div>
+    <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="nav-icon">📊</span> Dashboard</div>
 
-    <div class="nav-section">Contenu</div>
-    <div class="nav-item" onclick="showPanel('plat')">
-      <span class="nav-icon">🍽</span> Plat du jour
-    </div>
-    <div class="nav-item" onclick="showPanel('menu')">
-      <span class="nav-icon">📋</span> Menu
-    </div>
-    <div class="nav-item" onclick="showPanel('galerie')">
-      <span class="nav-icon">📸</span> Galerie photos
-    </div>
+    <div class="nav-group-label">Contenu</div>
+    <div class="nav-item" onclick="showPanel('plat',this)"><span class="nav-icon">🍽</span> Plat du jour</div>
+    <div class="nav-item" onclick="showPanel('menu',this)"><span class="nav-icon">📋</span> Menu</div>
+    <div class="nav-item" onclick="showPanel('galerie',this)"><span class="nav-icon">📸</span> Galerie photos</div>
 
-    <div class="nav-section">Paramètres</div>
-    <div class="nav-item" onclick="showPanel('settings')">
-      <span class="nav-icon">⚙️</span> Configuration
-    </div>
-    <div class="nav-item" onclick="showPanel('zenchef')">
-      <span class="nav-icon">🗓</span> Zenchef
-    </div>
+    <div class="nav-group-label">Paramètres</div>
+    <div class="nav-item" onclick="showPanel('zenchef',this)"><span class="nav-icon">🗓</span> Zenchef</div>
+    <div class="nav-item" onclick="showPanel('settings',this)"><span class="nav-icon">⚙️</span> Configuration</div>
   </nav>
   <div class="sidebar-footer">
-    <span class="admin-badge">Admin connecté</span>
+    <span class="admin-badge">Admin</span>
     <button class="logout-btn" onclick="logout()">Déconnexion</button>
   </div>
 </aside>
@@ -206,28 +169,39 @@
       <p class="page-sub">Gérez le contenu de votre restaurant depuis cet espace.</p>
     </div>
     <div class="stats-grid">
-      <div class="stat-card"><div class="stat-value" id="statBurgers">0</div><div class="stat-label">Burgers</div></div>
-      <div class="stat-card"><div class="stat-value" id="statGrillades">0</div><div class="stat-label">Grillades</div></div>
-      <div class="stat-card"><div class="stat-value" id="statPhotos">0</div><div class="stat-label">Photos</div></div>
-      <div class="stat-card"><div class="stat-value" id="statPlat">✓</div><div class="stat-label">Plat du jour</div></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Accès rapide</div>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;">
-        <button class="btn btn-primary" onclick="showPanel('plat')">🍽 Modifier le plat du jour</button>
-        <button class="btn btn-ghost" onclick="showPanel('menu')">📋 Gérer le menu</button>
-        <button class="btn btn-ghost" onclick="showPanel('galerie')">📸 Galerie</button>
-        <a href="index.html" target="_blank" class="btn btn-or">👁 Voir le site</a>
-      </div>
+      <div class="stat-card"><div class="stat-value" id="statBurgers">—</div><div class="stat-label">Burgers</div></div>
+      <div class="stat-card"><div class="stat-value" id="statGrillades">—</div><div class="stat-label">Grillades</div></div>
+      <div class="stat-card"><div class="stat-value" id="statPhotos">—</div><div class="stat-label">Photos</div></div>
+      <div class="stat-card"><div class="stat-value">✓</div><div class="stat-label">Plat du jour</div></div>
     </div>
     <div class="card">
       <div class="card-title">Plat du jour actuel</div>
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;">
         <div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:6px;" id="dashPlatName">—</div>
-          <div style="color:rgba(245,237,216,0.6);font-size:0.95rem;" id="dashPlatDesc">—</div>
+          <div style="font-family:'Libre Baskerville',serif;font-size:1.4rem;font-style:italic;color:var(--brun);margin-bottom:6px;" id="dashPlatNom">—</div>
+          <div style="font-family:'Cormorant',serif;color:var(--texte-doux);font-size:1rem;" id="dashPlatDetail">—</div>
         </div>
-        <div style="font-size:1.8rem;color:var(--or);font-style:italic;" id="dashPlatPrice">—</div>
+        <div style="font-family:'Cormorant',serif;font-style:italic;font-size:1.8rem;color:var(--brun);" id="dashPlatPrix">—</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Accès rapide</div>
+      <div class="quick-grid">
+        <div class="quick-card" onclick="showPanel('plat',null)">
+          <div class="quick-icon">🍽</div>
+          <div class="quick-label">Plat du jour</div>
+          <div class="quick-sub">Mettre à jour</div>
+        </div>
+        <div class="quick-card" onclick="showPanel('menu',null)">
+          <div class="quick-icon">📋</div>
+          <div class="quick-label">Menu</div>
+          <div class="quick-sub">Gérer les articles</div>
+        </div>
+        <a href="index.html" target="_blank" class="quick-card">
+          <div class="quick-icon">👁</div>
+          <div class="quick-label">Voir le site</div>
+          <div class="quick-sub">Nouvelle fenêtre</div>
+        </a>
       </div>
     </div>
   </div>
@@ -238,24 +212,22 @@
       <h1 class="page-title">Plat du jour</h1>
       <p class="page-sub">Mettez à jour le plat du jour affiché sur le site.</p>
     </div>
-    <div id="alertPlat" class="alert success">✔ Plat du jour enregistré avec succès.</div>
+    <div id="alertPlat" class="alert success">✔ Plat du jour enregistré.</div>
     <div class="card">
       <div class="card-title">Définir le plat du jour</div>
       <div class="form-group">
         <label>Nom du plat</label>
-        <input type="text" id="platName" placeholder="Ex: Côte de Bœuf Pujadas">
+        <input type="text" id="platNom" placeholder="Ex : Côte de Bœuf Pujadas">
       </div>
       <div class="form-group">
         <label>Description</label>
-        <textarea id="platDesc" rows="3" placeholder="Ex: Grillade au barbecue Pujadas, beurre maître d'hôtel..."></textarea>
+        <textarea id="platDetail" rows="3" placeholder="Ex : Grillade au barbecue Pujadas · beurre maître d'hôtel…"></textarea>
       </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Prix</label>
-          <input type="text" id="platPrice" placeholder="Ex: 24€">
-        </div>
+      <div class="form-group" style="max-width:200px;">
+        <label>Prix</label>
+        <input type="text" id="platPrix" placeholder="Ex : 28 €">
       </div>
-      <button class="btn btn-primary" onclick="savePlat()">💾 Enregistrer le plat du jour</button>
+      <button class="btn btn-primary" onclick="savePlat()">💾 Enregistrer</button>
     </div>
   </div>
 
@@ -263,28 +235,24 @@
   <div class="panel" id="panel-menu">
     <div class="page-header">
       <h1 class="page-title">Gestion du menu</h1>
-      <p class="page-sub">Ajoutez, modifiez ou supprimez des articles du menu.</p>
+      <p class="page-sub">Ajoutez, modifiez ou supprimez des articles.</p>
     </div>
     <div id="alertMenu" class="alert success">✔ Menu mis à jour.</div>
     <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center;">
-        <span>Articles du menu</span>
-        <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Ajouter un article</button>
+      <div class="card-title-row">
+        <div class="card-title">Articles</div>
+        <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Ajouter</button>
       </div>
-      <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
-        <button class="menu-filter-btn active" onclick="filterAdmin('burgers')">Burgers</button>
-        <button class="menu-filter-btn" onclick="filterAdmin('grillades')">Grillades</button>
-        <button class="menu-filter-btn" onclick="filterAdmin('entrees')">Entrées</button>
-        <button class="menu-filter-btn" onclick="filterAdmin('desserts')">Desserts</button>
-        <button class="menu-filter-btn" onclick="filterAdmin('boissons')">Boissons</button>
+      <div class="filter-tabs">
+        <button class="filter-tab active" onclick="filterAdmin('burgers',this)">Burgers</button>
+        <button class="filter-tab" onclick="filterAdmin('grillades',this)">Grillades</button>
+        <button class="filter-tab" onclick="filterAdmin('entrees',this)">Entrées</button>
+        <button class="filter-tab" onclick="filterAdmin('desserts',this)">Desserts</button>
+        <button class="filter-tab" onclick="filterAdmin('boissons',this)">Boissons</button>
       </div>
-      <style>
-        .menu-filter-btn { padding:8px 18px;border:1px solid rgba(201,148,58,0.2);background:transparent;color:var(--creme);font-family:'Cormorant Garamond',serif;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:all 0.2s; }
-        .menu-filter-btn.active,.menu-filter-btn:hover{background:var(--or);border-color:var(--or);color:var(--charbon);}
-      </style>
-      <table class="menu-table">
+      <table class="data-table">
         <thead><tr>
-          <th>Nom</th><th>Description</th><th>Prix</th><th>Badge</th><th>Actions</th>
+          <th>Plat</th><th>Prix</th><th>Badge</th><th>Actions</th>
         </tr></thead>
         <tbody id="adminMenuBody"></tbody>
       </table>
@@ -295,11 +263,11 @@
   <div class="panel" id="panel-galerie">
     <div class="page-header">
       <h1 class="page-title">Galerie photos</h1>
-      <p class="page-sub">Cliquez sur un emplacement pour y téléverser une photo.</p>
+      <p class="page-sub">Cliquez sur un emplacement pour y ajouter une photo.</p>
     </div>
     <div id="alertGalerie" class="alert success">✔ Photo enregistrée.</div>
     <div class="card">
-      <div class="card-title">Photos du restaurant (5 emplacements)</div>
+      <div class="card-title">5 emplacements photo</div>
       <div class="photo-grid" id="photoGrid"></div>
     </div>
   </div>
@@ -308,27 +276,27 @@
   <div class="panel" id="panel-zenchef">
     <div class="page-header">
       <h1 class="page-title">Intégration Zenchef</h1>
-      <p class="page-sub">Configurez l'URL de réservation Zenchef de votre restaurant.</p>
+      <p class="page-sub">Configurez votre lien de réservation en ligne.</p>
     </div>
-    <div id="alertZenchef" class="alert success">✔ URL Zenchef enregistrée.</div>
+    <div id="alertZenchef" class="alert success">✔ URL enregistrée.</div>
     <div class="card">
-      <div class="card-title">Paramètres Zenchef</div>
+      <div class="card-title">Lien Zenchef</div>
       <div class="form-group">
-        <label>URL de réservation Zenchef</label>
+        <label>URL de réservation</label>
         <input type="url" id="zenchefUrl" placeholder="https://www.zenchef.com/votre-restaurant">
       </div>
-      <p style="font-size:0.85rem;color:rgba(245,237,216,0.4);margin-bottom:20px;">
-        Trouvez cette URL dans votre tableau de bord Zenchef → Widgets → Lien de réservation.
+      <p style="font-family:'Cormorant',serif;font-size:0.95rem;color:var(--texte-doux);margin-bottom:20px;line-height:1.7;">
+        Trouvez cette URL dans votre tableau de bord Zenchef → Widgets → Lien de réservation direct.
       </p>
       <button class="btn btn-primary" onclick="saveZenchef()">💾 Enregistrer</button>
     </div>
     <div class="card">
-      <div class="card-title">À propos de Zenchef</div>
-      <p style="font-size:0.95rem;color:rgba(245,237,216,0.6);line-height:1.8;">
-        Zenchef est une solution de réservation en ligne spécialisée pour les restaurants.
-        Les clients peuvent réserver directement depuis votre site web.
+      <div class="card-title">À propos</div>
+      <p style="font-family:'Cormorant',serif;font-size:1rem;color:var(--texte-doux);line-height:1.8;">
+        Zenchef est la solution de réservation en ligne N°1 pour les restaurateurs en France.
+        Les clients réservent directement depuis votre site, 24h/24.
         <br><br>
-        <a href="https://www.zenchef.com" target="_blank" style="color:var(--or);">→ Accéder à Zenchef.com</a>
+        <a href="https://www.zenchef.com" target="_blank" style="color:var(--brun);font-weight:500;">→ Accéder à Zenchef.com</a>
       </p>
     </div>
   </div>
@@ -337,17 +305,20 @@
   <div class="panel" id="panel-settings">
     <div class="page-header">
       <h1 class="page-title">Configuration</h1>
-      <p class="page-sub">Paramètres généraux du restaurant.</p>
+      <p class="page-sub">Logo, informations et mot de passe administrateur.</p>
     </div>
-    <div id="alertSettings" class="alert success">✔ Configuration enregistrée.</div>
+    <div id="alertSettings" class="alert success">✔ Enregistré.</div>
     <div class="card">
-      <div class="card-title">Logo du restaurant</div>
-      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px;">
-        <img id="logoPreview" src="" alt="" style="max-width:200px;max-height:80px;display:none;filter:invert(1);">
-        <div>
-          <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="previewLogo(this)">
-          <button class="btn btn-ghost" onclick="document.getElementById('logoFile').click()">📁 Choisir le logo</button>
-          <button class="btn btn-primary" onclick="saveLogo()" style="margin-left:8px;">💾 Enregistrer</button>
+      <div class="card-title">Photo principale (Hero)</div>
+      <p style="font-family:'Cormorant',serif;font-size:0.95rem;color:var(--texte-doux);margin-bottom:16px;line-height:1.7;">
+        Cette photo apparaît en arrière-plan de la section d'accueil. Idéalement une belle photo de votre burger signature ou de votre grill Pujadas.
+      </p>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <input type="file" id="logoFile" accept="image/*" style="display:none" onchange="previewLogo(this)">
+        <img id="logoPreview" src="" style="max-width:180px;max-height:100px;display:none;border:1px solid rgba(92,34,24,0.15);">
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-ghost" onclick="document.getElementById('logoFile').click()">📁 Choisir</button>
+          <button class="btn btn-primary" onclick="saveLogo()">💾 Enregistrer</button>
         </div>
       </div>
     </div>
@@ -356,21 +327,21 @@
       <div class="form-row">
         <div class="form-group">
           <label>Adresse</label>
-          <textarea id="settingsAdresse" rows="2"></textarea>
+          <textarea id="settingsAdresse" rows="2" placeholder="123 Rue du Marché&#10;Marseille, France"></textarea>
         </div>
         <div class="form-group">
           <label>Horaires</label>
-          <textarea id="settingsHoraires" rows="2"></textarea>
+          <textarea id="settingsHoraires" rows="2" placeholder="Lun–Sam : 12h – 14h30&#10;Soir : 19h – 22h30"></textarea>
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group" style="max-width:280px;">
         <label>Téléphone</label>
-        <input type="tel" id="settingsTel">
+        <input type="tel" id="settingsTel" placeholder="00 00 00 00 00">
       </div>
       <button class="btn btn-primary" onclick="saveSettings()">💾 Enregistrer</button>
     </div>
     <div class="card">
-      <div class="card-title">Changer le mot de passe admin</div>
+      <div class="card-title">Changer le mot de passe</div>
       <div class="form-row">
         <div class="form-group">
           <label>Nouveau mot de passe</label>
@@ -381,7 +352,7 @@
           <input type="password" id="confirmPass" placeholder="••••••">
         </div>
       </div>
-      <button class="btn btn-primary" onclick="changePass()">🔒 Changer le mot de passe</button>
+      <button class="btn btn-primary" onclick="changePass()">🔒 Modifier</button>
     </div>
   </div>
 
@@ -394,7 +365,7 @@
     <div class="form-group">
       <label>Catégorie</label>
       <select id="editCat">
-        <option value="burgers">Burgers</option>
+        <option value="burgers">Burgers grillés</option>
         <option value="grillades">Grillades</option>
         <option value="entrees">Entrées</option>
         <option value="desserts">Desserts</option>
@@ -403,20 +374,20 @@
     </div>
     <div class="form-group">
       <label>Nom du plat</label>
-      <input type="text" id="editName" placeholder="Ex: Côte de Bœuf">
+      <input type="text" id="editName" placeholder="Ex : La Côte Signature">
     </div>
     <div class="form-group">
       <label>Description</label>
-      <textarea id="editDesc" rows="3" placeholder="Ingrédients et détails..."></textarea>
+      <textarea id="editDesc" rows="3" placeholder="Ingrédients et préparation…"></textarea>
     </div>
     <div class="form-row">
       <div class="form-group">
         <label>Prix</label>
-        <input type="text" id="editPrice" placeholder="Ex: 18€">
+        <input type="text" id="editPrice" placeholder="Ex : 18 €">
       </div>
       <div class="form-group">
         <label>Badge (optionnel)</label>
-        <input type="text" id="editBadge" placeholder="Ex: Signature, Nouveau…">
+        <input type="text" id="editBadge" placeholder="Ex : Signature, Nouveau…">
       </div>
     </div>
     <div class="modal-btns">
@@ -427,273 +398,204 @@
 </div>
 
 <script>
-// ============================================================
-// AUTH CHECK
-// ============================================================
-if(localStorage.getItem('lacote_auth') !== '1') window.location.href = 'index.html';
+/* AUTH */
+if(localStorage.getItem('lacote_auth')!=='1') window.location.href='index.html';
+function logout(){localStorage.removeItem('lacote_auth');window.location.href='index.html';}
 
-function logout() { localStorage.removeItem('lacote_auth'); window.location.href = 'index.html'; }
-
-// ============================================================
-// DATA
-// ============================================================
-const DEFAULT_MENU = {
-  burgers: [
-    { name:"La Côte Burger", desc:"Bœuf Charolais, cheddar affiné, sauce maison, oignons confits", price:"16€", badge:"Signature" },
-    { name:"BBQ Pujadas", desc:"Double patty, bacon fumé, sauce BBQ maison, pickles", price:"18€" },
-    { name:"Le Veggie", desc:"Galette de légumes grillés, avocat, pesto, roquette", price:"14€" },
-    { name:"Truffe & Comté", desc:"Bœuf Wagyu, copeaux de truffe, Comté 18 mois", price:"24€", badge:"Premium" },
-  ],
-  grillades: [
-    { name:"Côte de Bœuf", desc:"800g, grillade Pujadas, beurre maître d'hôtel, pour 2 personnes", price:"52€", badge:"Pour 2" },
-    { name:"Entrecôte", desc:"Grillade Pujadas, sauce au poivre ou béarnaise, frites maison", price:"26€" },
-    { name:"Poulet Fermier", desc:"Demi-poulet fermier, marinade citron-herbes, grillé au charbon", price:"19€" },
-    { name:"Côtelettes d'Agneau", desc:"Rack d'agneau, croûte de persil, jus au thym", price:"28€", badge:"Spécialité" },
-  ],
-  entrees: [
-    { name:"Burrata & Tomates", desc:"Burrata crémeuse, tomates anciennes, basilic frais, huile d'olive", price:"11€" },
-    { name:"Os à Moelle", desc:"Os à moelle rôti, persillade, pain grillé au charbon", price:"9€" },
-    { name:"Salade César", desc:"Romaine, poulet grillé, parmesan, croûtons maison", price:"13€" },
-  ],
-  desserts: [
-    { name:"Fondant Chocolat", desc:"Cœur coulant, glace vanille Bourbon, pralin", price:"8€" },
-    { name:"Crème Brûlée", desc:"Vanille de Madagascar, caramel à la cassonade", price:"7€" },
-    { name:"Tarte Tatin", desc:"Pommes caramélisées, pâte feuilletée, crème fraîche", price:"8€" },
-  ],
-  boissons: [
-    { name:"Sélection Vins", desc:"Rouge, blanc, rosé — demandez notre carte des vins", price:"à partir de 5€" },
-    { name:"Bières Artisanales", desc:"Sélection locale, blonde, brune, IPA", price:"4–6€" },
-    { name:"Limonades Maison", desc:"Citron-gingembre, fraise-basilic, menthe-concombre", price:"4€" },
-  ]
+/* DATA */
+const MENU_DEF={
+  burgers:{titre:'Burgers grillés',sous:'Pain artisanal grillé, viande maturée, cuisson au feu de bois',items:[
+    {name:'La Côte Signature',desc:'Bœuf maturé 40j, cheddar affiné, oignon confit, sauce maison',price:'18 €',badge:'Signature'},
+    {name:'Le Pujadas Burger',desc:"Bœuf, confit d'oignons au vin rouge, comté 18 mois, roquette",price:'19 €'},
+    {name:'Le Fumé',desc:'Poitrine fumée, cheddar, sauce barbecue artisanale, cornichons',price:'17 €'},
+    {name:'Le Végétal',desc:'Galette de légumes grillés, chèvre frais, pesto roquette, tomate confite',price:'16 €'},
+    {name:'Le Forestier',desc:"Bœuf, champignons sauvages poêlés, fourme d'Ambert, échalotes",price:'19 €'},
+  ]},
+  grillades:{titre:'Grillades',sous:'Cuisson au barbecue Pujadas à fonte, au feu de bois',items:[
+    {name:'Côte de Bœuf',desc:"800g pour 2, grillade Pujadas, beurre maître d'hôtel",price:'52 €',badge:'Pour 2'},
+    {name:'Entrecôte',desc:'Sauce au poivre ou béarnaise, frites maison',price:'26 €'},
+    {name:'Poulet Fermier',desc:'Demi-poulet, marinade citron-herbes, grillé au charbon',price:'19 €'},
+    {name:"Côtelettes d'Agneau",desc:"Rack d'agneau, croûte de persil, jus au thym",price:'28 €',badge:'Spécialité'},
+  ]},
+  entrees:{titre:'Entrées',sous:"Pour commencer dans les règles de l'art",items:[
+    {name:'Burrata & Tomates',desc:"Burrata crémeuse, tomates anciennes, basilic, huile d'olive",price:'11 €'},
+    {name:'Os à Moelle',desc:'Os à moelle rôti, persillade, pain grillé au charbon',price:'9 €'},
+    {name:'Salade César',desc:'Romaine, poulet grillé, parmesan, croûtons maison',price:'13 €'},
+  ]},
+  desserts:{titre:'Desserts',sous:'Pour finir en beauté',items:[
+    {name:'Fondant Chocolat',desc:'Cœur coulant, glace vanille Bourbon, pralin',price:'8 €'},
+    {name:'Crème Brûlée',desc:'Vanille de Madagascar, caramel à la cassonade',price:'7 €'},
+    {name:'Tarte Tatin',desc:'Pommes caramélisées, pâte feuilletée, crème fraîche',price:'8 €'},
+  ]},
+  boissons:{titre:'Boissons',sous:'Vins, bières artisanales et softs maison',items:[
+    {name:'Carte des vins',desc:'Sélection rouge, blanc, rosé',price:'à partir de 5 €'},
+    {name:'Bières Artisanales',desc:'Sélection locale blonde, brune, IPA',price:'4 – 6 €'},
+    {name:'Limonades Maison',desc:'Citron-gingembre, fraise-basilic, menthe-concombre',price:'4 €'},
+  ]}
 };
-const DEFAULT_PLAT = { name:"Côte de Bœuf Pujadas", desc:"Grillade au barbecue Pujadas, beurre maître d'hôtel, gratin dauphinois maison", price:"28€" };
+const PLAT_DEF={nom:'Côte de Bœuf Pujadas',detail:"Grillade au barbecue Pujadas · beurre maître d'hôtel · gratin dauphinois maison",prix:'28 €'};
 
-function getData(k,d){ try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;} }
-function setData(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+function gd(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sd(k,v){localStorage.setItem(k,JSON.stringify(v));}
 
-// ============================================================
-// NAV
-// ============================================================
-function showPanel(id) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+/* NAV */
+function showPanel(id,navEl){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById('panel-'+id).classList.add('active');
-  event && event.currentTarget && event.currentTarget.classList.add('active');
+  if(navEl) navEl.classList.add('active');
+  if(id==='dashboard') loadDashboard();
   if(id==='plat') loadPlatForm();
   if(id==='menu') renderAdminMenu();
   if(id==='galerie') renderPhotoGrid();
   if(id==='settings') loadSettings();
   if(id==='zenchef') loadZenchef();
-  if(id==='dashboard') loadDashboard();
 }
 
-// force active nav on click
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', function(){ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); this.classList.add('active'); });
-});
-
-// ============================================================
-// DASHBOARD
-// ============================================================
+/* DASHBOARD */
 function loadDashboard(){
-  const menu = getData('lacote_menu', DEFAULT_MENU);
-  document.getElementById('statBurgers').textContent = (menu.burgers||[]).length;
-  document.getElementById('statGrillades').textContent = (menu.grillades||[]).length;
-  const photos = getData('lacote_gallery',[]);
-  document.getElementById('statPhotos').textContent = photos.filter(Boolean).length;
-  const plat = getData('lacote_plat', DEFAULT_PLAT);
-  document.getElementById('dashPlatName').textContent = plat.name;
-  document.getElementById('dashPlatDesc').textContent = plat.desc;
-  document.getElementById('dashPlatPrice').textContent = plat.price;
+  const m=gd('lacote_menu',null)||MENU_DEF;
+  document.getElementById('statBurgers').textContent=(m.burgers.items||[]).length;
+  document.getElementById('statGrillades').textContent=(m.grillades.items||[]).length;
+  const photos=gd('lacote_gallery',[]);
+  document.getElementById('statPhotos').textContent=photos.filter(Boolean).length;
+  const p=gd('lacote_plat',PLAT_DEF);
+  document.getElementById('dashPlatNom').textContent=p.nom||p.name||PLAT_DEF.nom;
+  document.getElementById('dashPlatDetail').textContent=p.detail||p.desc||PLAT_DEF.detail;
+  document.getElementById('dashPlatPrix').textContent=p.prix||p.price||PLAT_DEF.prix;
 }
 
-// ============================================================
-// PLAT DU JOUR
-// ============================================================
+/* PLAT */
 function loadPlatForm(){
-  const plat = getData('lacote_plat', DEFAULT_PLAT);
-  document.getElementById('platName').value = plat.name;
-  document.getElementById('platDesc').value = plat.desc;
-  document.getElementById('platPrice').value = plat.price;
+  const p=gd('lacote_plat',PLAT_DEF);
+  document.getElementById('platNom').value=p.nom||p.name||PLAT_DEF.nom;
+  document.getElementById('platDetail').value=p.detail||p.desc||PLAT_DEF.detail;
+  document.getElementById('platPrix').value=p.prix||p.price||PLAT_DEF.prix;
 }
 function savePlat(){
-  setData('lacote_plat',{ name:document.getElementById('platName').value, desc:document.getElementById('platDesc').value, price:document.getElementById('platPrice').value });
+  sd('lacote_plat',{nom:document.getElementById('platNom').value,detail:document.getElementById('platDetail').value,prix:document.getElementById('platPrix').value});
   showAlert('alertPlat','success','✔ Plat du jour enregistré avec succès.');
 }
 
-// ============================================================
-// MENU
-// ============================================================
-let adminCat = 'burgers';
-function filterAdmin(cat){
-  adminCat = cat;
-  document.querySelectorAll('.menu-filter-btn').forEach((b,i)=>{
-    b.classList.toggle('active', ['burgers','grillades','entrees','desserts','boissons'][i]===cat);
-  });
+/* MENU */
+let adminCat='burgers';
+function filterAdmin(cat,btn){
+  adminCat=cat;
+  document.querySelectorAll('.filter-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   renderAdminMenu();
 }
 function renderAdminMenu(){
-  const menu = getData('lacote_menu', DEFAULT_MENU);
-  const items = menu[adminCat]||[];
-  document.getElementById('adminMenuBody').innerHTML = items.map((item,i)=>`
+  const m=gd('lacote_menu',null)||MENU_DEF;
+  const items=(m[adminCat]||MENU_DEF[adminCat]).items||[];
+  document.getElementById('adminMenuBody').innerHTML=items.map((item,i)=>`
     <tr>
-      <td><div class="item-name">${item.name}</div></td>
-      <td><div class="item-desc">${item.desc}</div></td>
-      <td class="item-price-cell">${item.price}</td>
+      <td><div class="item-name">${item.name}</div><div class="item-desc">${item.desc}</div></td>
+      <td class="item-price">${item.price}</td>
       <td>${item.badge?`<span class="badge">${item.badge}</span>`:''}</td>
       <td><div class="actions">
-        <button class="btn btn-ghost btn-sm" onclick="openEditModal(${i})">✏</button>
+        <button class="btn btn-ghost btn-sm" onclick="openEditModal(${i})">✏ Éditer</button>
         <button class="btn btn-danger btn-sm" onclick="deleteItem(${i})">🗑</button>
       </div></td>
-    </tr>
-  `).join('');
+    </tr>`).join('');
 }
-
-let editIndex = -1;
+let editIndex=-1;
 function openAddModal(){
-  editIndex = -1;
-  document.getElementById('modalTitle').textContent = 'Ajouter un article';
-  document.getElementById('editCat').value = adminCat;
-  document.getElementById('editName').value='';
-  document.getElementById('editDesc').value='';
-  document.getElementById('editPrice').value='';
-  document.getElementById('editBadge').value='';
+  editIndex=-1;
+  document.getElementById('modalTitle').textContent="Ajouter un article";
+  document.getElementById('editCat').value=adminCat;
+  ['editName','editDesc','editPrice','editBadge'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('editModal').classList.add('open');
 }
 function openEditModal(i){
-  editIndex = i;
-  const menu = getData('lacote_menu',DEFAULT_MENU);
-  const item = menu[adminCat][i];
-  document.getElementById('modalTitle').textContent = 'Modifier l\'article';
-  document.getElementById('editCat').value = adminCat;
-  document.getElementById('editName').value = item.name;
-  document.getElementById('editDesc').value = item.desc;
-  document.getElementById('editPrice').value = item.price;
-  document.getElementById('editBadge').value = item.badge||'';
+  editIndex=i;
+  const m=gd('lacote_menu',null)||MENU_DEF;
+  const item=(m[adminCat]||MENU_DEF[adminCat]).items[i];
+  document.getElementById('modalTitle').textContent="Modifier l'article";
+  document.getElementById('editCat').value=adminCat;
+  document.getElementById('editName').value=item.name;
+  document.getElementById('editDesc').value=item.desc;
+  document.getElementById('editPrice').value=item.price;
+  document.getElementById('editBadge').value=item.badge||'';
   document.getElementById('editModal').classList.add('open');
 }
-function closeModal(){ document.getElementById('editModal').classList.remove('open'); }
-document.getElementById('editModal').addEventListener('click',e=>{ if(e.target===e.currentTarget) closeModal(); });
-
+function closeModal(){document.getElementById('editModal').classList.remove('open');}
+document.getElementById('editModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
 function saveItem(){
-  const cat = document.getElementById('editCat').value;
-  const item = {
-    name: document.getElementById('editName').value,
-    desc: document.getElementById('editDesc').value,
-    price: document.getElementById('editPrice').value,
-    badge: document.getElementById('editBadge').value || undefined
-  };
-  if(!item.badge) delete item.badge;
-  const menu = getData('lacote_menu',DEFAULT_MENU);
-  if(!menu[cat]) menu[cat]=[];
-  if(editIndex>=0 && cat===adminCat) menu[cat][editIndex]=item;
-  else menu[cat].push(item);
-  setData('lacote_menu',menu);
-  closeModal();
-  adminCat = cat;
-  renderAdminMenu();
-  showAlert('alertMenu','success','✔ Menu mis à jour avec succès.');
+  const cat=document.getElementById('editCat').value;
+  const item={name:document.getElementById('editName').value,desc:document.getElementById('editDesc').value,price:document.getElementById('editPrice').value};
+  const b=document.getElementById('editBadge').value; if(b) item.badge=b;
+  const m=gd('lacote_menu',null)||JSON.parse(JSON.stringify(MENU_DEF));
+  if(!m[cat]) m[cat]={...MENU_DEF[cat],items:[]};
+  if(!m[cat].items) m[cat].items=[];
+  if(editIndex>=0&&cat===adminCat) m[cat].items[editIndex]=item;
+  else m[cat].items.push(item);
+  sd('lacote_menu',m); closeModal(); adminCat=cat; renderAdminMenu();
+  showAlert('alertMenu','success','✔ Menu mis à jour.');
 }
 function deleteItem(i){
   if(!confirm('Supprimer cet article ?')) return;
-  const menu = getData('lacote_menu',DEFAULT_MENU);
-  menu[adminCat].splice(i,1);
-  setData('lacote_menu',menu);
-  renderAdminMenu();
+  const m=gd('lacote_menu',null)||JSON.parse(JSON.stringify(MENU_DEF));
+  m[adminCat].items.splice(i,1); sd('lacote_menu',m); renderAdminMenu();
   showAlert('alertMenu','success','✔ Article supprimé.');
 }
 
-// ============================================================
-// GALLERY
-// ============================================================
-const slotLabels = ['🔥 Grillades','🍔 Burgers','🥩 Viandes','🍷 Ambiance','🌿 Terrasse'];
+/* GALLERY */
+const SLOT_LABELS=[{icon:'🔥',label:'Grillades'},{icon:'🍔',label:'Burgers'},{icon:'🥩',label:'Viandes'},{icon:'🍷',label:'Ambiance'},{icon:'🌿',label:'Terrasse'}];
 function renderPhotoGrid(){
-  const photos = getData('lacote_gallery', Array(5).fill(null));
-  const grid = document.getElementById('photoGrid');
-  grid.innerHTML = slotLabels.map((label,i)=>`
-    <div class="photo-slot" onclick="document.getElementById('photoInput${i}').click()">
+  const photos=gd('lacote_gallery',Array(5).fill(null));
+  document.getElementById('photoGrid').innerHTML=SLOT_LABELS.map((l,i)=>`
+    <div class="photo-slot" onclick="document.getElementById('pi${i}').click()">
       ${photos[i]?`<img src="${photos[i]}" alt="">`:''}
-      <div style="text-align:center;padding:20px;">
-        <div class="slot-icon">${label.split(' ')[0]}</div>
-        <div class="upload-hint">${label.split(' ').slice(1).join(' ')}</div>
+      <div style="text-align:center;padding:20px;position:relative;">
+        <div class="slot-icon">${l.icon}</div>
+        <div class="slot-label">${l.label}</div>
       </div>
-      ${photos[i]?`<div class="overlay"><button onclick="removePhoto(event,${i})" class="btn btn-danger btn-sm">🗑 Supprimer</button></div>`:''}
-      <input type="file" id="photoInput${i}" accept="image/*" onchange="uploadPhoto(this,${i})">
-    </div>
-  `).join('');
+      ${photos[i]?`<div class="overlay"><button onclick="rmPhoto(event,${i})" class="btn btn-danger btn-sm">🗑 Supprimer</button></div>`:''}
+      <input type="file" id="pi${i}" accept="image/*" onchange="uploadPhoto(this,${i})">
+    </div>`).join('');
 }
-function uploadPhoto(input, idx){
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const photos = getData('lacote_gallery', Array(5).fill(null));
-    photos[idx] = e.target.result;
-    setData('lacote_gallery', photos);
-    renderPhotoGrid();
-    showAlert('alertGalerie','success','✔ Photo enregistrée.');
-  };
-  reader.readAsDataURL(file);
-}
-function removePhoto(e,idx){ e.stopPropagation(); const p=getData('lacote_gallery',Array(5).fill(null)); p[idx]=null; setData('lacote_gallery',p); renderPhotoGrid(); }
-
-// ============================================================
-// LOGO
-// ============================================================
-function previewLogo(input){
+function uploadPhoto(input,idx){
   const file=input.files[0]; if(!file) return;
-  const reader=new FileReader();
-  reader.onload=e=>{ const img=document.getElementById('logoPreview'); img.src=e.target.result; img.style.display='block'; };
-  reader.readAsDataURL(file);
+  const r=new FileReader(); r.onload=e=>{const p=gd('lacote_gallery',Array(5).fill(null));p[idx]=e.target.result;sd('lacote_gallery',p);renderPhotoGrid();showAlert('alertGalerie','success','✔ Photo enregistrée.');};
+  r.readAsDataURL(file);
 }
-function saveLogo(){
-  const src=document.getElementById('logoPreview').src;
-  if(!src) return;
-  localStorage.setItem('lacote_logo', JSON.stringify(src));
-  showAlert('alertSettings','success','✔ Logo enregistré.');
-}
+function rmPhoto(e,idx){e.stopPropagation();const p=gd('lacote_gallery',Array(5).fill(null));p[idx]=null;sd('lacote_gallery',p);renderPhotoGrid();}
 
-// ============================================================
-// SETTINGS
-// ============================================================
+/* LOGO */
+function previewLogo(input){const f=input.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{const i=document.getElementById('logoPreview');i.src=e.target.result;i.style.display='block';};r.readAsDataURL(f);}
+function saveLogo(){const src=document.getElementById('logoPreview').src;if(!src||src===location.href)return;sd('lacote_logo',src);showAlert('alertSettings','success','✔ Photo hero enregistrée.');}
+
+/* SETTINGS */
 function loadSettings(){
-  const logo=getData('lacote_logo',null); if(logo){const img=document.getElementById('logoPreview');img.src=logo;img.style.display='block';}
-  document.getElementById('settingsAdresse').value=getData('lacote_adresse','123 Rue du Marché\nMarseille, France');
-  document.getElementById('settingsHoraires').value=getData('lacote_horaires','Lun–Sam : 12h – 14h30\nLun–Sam : 19h – 22h30');
-  document.getElementById('settingsTel').value=getData('lacote_tel','00 00 00 00 00');
+  const logo=gd('lacote_logo',null);if(logo){const i=document.getElementById('logoPreview');i.src=logo;i.style.display='block';}
+  document.getElementById('settingsAdresse').value=gd('lacote_adresse','123 Rue du Marché\nMarseille, France');
+  document.getElementById('settingsHoraires').value=gd('lacote_horaires','Lun–Sam : 12h – 14h30\nLun–Sam : 19h – 22h30');
+  document.getElementById('settingsTel').value=gd('lacote_tel','00 00 00 00 00');
 }
 function saveSettings(){
-  setData('lacote_adresse',document.getElementById('settingsAdresse').value);
-  setData('lacote_horaires',document.getElementById('settingsHoraires').value);
-  setData('lacote_tel',document.getElementById('settingsTel').value);
+  sd('lacote_adresse',document.getElementById('settingsAdresse').value);
+  sd('lacote_horaires',document.getElementById('settingsHoraires').value);
+  sd('lacote_tel',document.getElementById('settingsTel').value);
   showAlert('alertSettings','success','✔ Paramètres enregistrés.');
 }
 function changePass(){
-  const np=document.getElementById('newPass').value; const cp=document.getElementById('confirmPass').value;
-  if(!np){showAlert('alertSettings','error','Entrez un nouveau mot de passe.');return;}
+  const np=document.getElementById('newPass').value,cp=document.getElementById('confirmPass').value;
+  if(!np){showAlert('alertSettings','error','Entrez un mot de passe.');return;}
   if(np!==cp){showAlert('alertSettings','error','Les mots de passe ne correspondent pas.');return;}
-  setData('lacote_admin_creds',{user:'admin',pass:np});
-  document.getElementById('newPass').value=''; document.getElementById('confirmPass').value='';
-  showAlert('alertSettings','success','✔ Mot de passe modifié avec succès.');
+  sd('lacote_admin_creds',{user:'admin',pass:np});
+  document.getElementById('newPass').value='';document.getElementById('confirmPass').value='';
+  showAlert('alertSettings','success','✔ Mot de passe modifié.');
 }
 
-// ============================================================
-// ZENCHEF
-// ============================================================
-function loadZenchef(){ document.getElementById('zenchefUrl').value=getData('lacote_zenchef_url','https://www.zenchef.com/lacote'); }
-function saveZenchef(){ setData('lacote_zenchef_url',document.getElementById('zenchefUrl').value); showAlert('alertZenchef','success','✔ URL Zenchef enregistrée.'); }
+/* ZENCHEF */
+function loadZenchef(){document.getElementById('zenchefUrl').value=gd('lacote_zenchef_url','https://www.zenchef.com/lacote');}
+function saveZenchef(){sd('lacote_zenchef_url',document.getElementById('zenchefUrl').value);showAlert('alertZenchef','success','✔ URL enregistrée.');}
 
-// ============================================================
-// ALERT HELPER
-// ============================================================
-function showAlert(id, type, msg){
-  const el=document.getElementById(id);
-  el.className='alert '+type; el.textContent=msg; el.style.display='block';
-  setTimeout(()=>el.style.display='none', 3500);
-}
+/* ALERT */
+function showAlert(id,type,msg){const el=document.getElementById(id);el.className='alert '+type;el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',3500);}
 
-// ============================================================
-// INIT
-// ============================================================
+/* INIT */
 loadDashboard();
 </script>
 </body>

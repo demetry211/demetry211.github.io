@@ -3,635 +3,421 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>La Côte — Burgers & Grillades</title>
+<title>La Côte — Burgers & Grillades Pujadas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@300;400;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Cormorant:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --rouge: #6B1A1A;
-    --rouge-clair: #8B2222;
-    --brun: #3D1F0D;
-    --creme: #F5EDD8;
-    --or: #C9943A;
-    --charbon: #1A1208;
-    --fumee: #2C2010;
-    --texte: #2A1505;
-  }
+:root {
+  --creme:     #F2EBD9;
+  --creme-alt: #EDE4CE;
+  --brun:      #5C2218;
+  --brun-clair:#7A3225;
+  --brun-pale: #C4A882;
+  --texte:     #2E1A10;
+  --texte-doux:#7A6450;
+  --blanc:     #FDFAF4;
+  --noir:      #1A0F08;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Cormorant',serif;background:var(--creme);color:var(--texte);overflow-x:hidden;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:1000;background:var(--blanc);border-bottom:1px solid rgba(92,34,24,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;transition:box-shadow 0.3s;}
+nav.shadow{box-shadow:0 4px 24px rgba(0,0,0,0.08);}
+.nav-logo{font-family:'Libre Baskerville',serif;font-size:1.15rem;font-style:italic;color:var(--brun);text-decoration:none;}
+.nav-links{display:flex;gap:32px;list-style:none;position:absolute;left:50%;transform:translateX(-50%);}
+.nav-links a{font-family:'Jost',sans-serif;font-size:0.68rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:var(--texte);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--brun);}
+.nav-cta{background:var(--brun);color:var(--blanc);padding:10px 26px;border:none;font-family:'Jost',sans-serif;font-size:0.68rem;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;text-decoration:none;border-radius:2px;transition:background 0.25s;}
+.nav-cta:hover{background:var(--brun-clair);}
 
-  html { scroll-behavior: smooth; }
+/* HERO */
+.hero{margin-top:64px;position:relative;height:calc(100vh - 64px);min-height:560px;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3D1A0A 0%,#7A3010 30%,#C06020 55%,#5A2A10 75%,#1A0A04 100%);background-size:cover;background-position:center;}
+.hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 0.6s;}
+.hero-photo.loaded{opacity:1;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,5,2,0.72) 0%,rgba(10,5,2,0.35) 55%,rgba(10,5,2,0.1) 100%);}
+.hero-content{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 80px;max-width:780px;}
+.hero-eyebrow{font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:4px;text-transform:uppercase;color:rgba(242,235,217,0.65);margin-bottom:28px;animation:fadeUp 0.9s ease both;}
+.hero-title{font-family:'Libre Baskerville',serif;font-size:clamp(2.8rem,5.5vw,4.8rem);line-height:1.12;color:#FDFAF4;margin-bottom:28px;animation:fadeUp 0.9s 0.15s ease both;}
+.hero-title em{font-style:italic;color:var(--brun-pale);}
+.hero-desc{font-family:'Cormorant',serif;font-size:1.15rem;font-weight:300;line-height:1.75;color:rgba(242,235,217,0.78);max-width:460px;margin-bottom:44px;animation:fadeUp 0.9s 0.3s ease both;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp 0.9s 0.45s ease both;}
+.btn-hero-reserve{display:inline-flex;align-items:center;gap:10px;background:var(--blanc);color:var(--brun);padding:15px 34px;border:none;font-family:'Jost',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all 0.25s;border-radius:2px;}
+.btn-hero-reserve:hover{background:var(--creme);transform:translateY(-2px);}
+.btn-hero-menu{display:inline-flex;align-items:center;gap:10px;background:transparent;color:#FDFAF4;padding:15px 34px;border:1px solid rgba(242,235,217,0.45);font-family:'Jost',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all 0.25s;border-radius:2px;}
+.btn-hero-menu:hover{border-color:#FDFAF4;transform:translateY(-2px);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
 
-  body {
-    font-family: 'Cormorant Garamond', serif;
-    background: var(--charbon);
-    color: var(--creme);
-    overflow-x: hidden;
-  }
+/* PLAT */
+.plat-banner{background:var(--brun);display:flex;align-items:center;justify-content:center;gap:36px;padding:22px 48px;flex-wrap:wrap;text-align:center;}
+.plat-label{font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:4px;text-transform:uppercase;color:var(--brun-pale);}
+.plat-sep{width:1px;height:32px;background:rgba(255,255,255,0.2);}
+.plat-nom{font-family:'Libre Baskerville',serif;font-style:italic;font-size:1.1rem;color:#FDFAF4;}
+.plat-detail{font-family:'Cormorant',serif;font-size:0.95rem;color:rgba(255,255,255,0.6);}
+.plat-prix{font-family:'Cormorant',serif;font-style:italic;font-size:1.5rem;color:var(--brun-pale);}
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 1000;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 48px;
-    background: linear-gradient(to bottom, rgba(26,18,8,0.97), transparent);
-    transition: background 0.3s;
-  }
-  nav.scrolled { background: rgba(26,18,8,0.98); box-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+/* SECTION COMMONS */
+.section-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--texte-doux);margin-bottom:14px;display:block;text-align:center;}
+.section-title{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,4vw,3.2rem);color:var(--brun);text-align:center;margin-bottom:20px;}
+.section-sub{font-family:'Cormorant',serif;font-weight:300;font-size:1.15rem;line-height:1.75;color:var(--texte-doux);text-align:center;max-width:640px;margin:0 auto;}
 
-  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--or); letter-spacing: 2px; text-decoration: none; }
+/* MENU */
+#menu{background:var(--creme-alt);padding:100px 72px;}
+.menu-header{margin-bottom:64px;}
+.menu-tabs{display:flex;gap:0;margin-bottom:56px;border-bottom:1px solid rgba(92,34,24,0.18);overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.menu-tab{padding:14px 28px;background:transparent;border:none;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--texte-doux);cursor:pointer;transition:all 0.25s;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;}
+.menu-tab:hover{color:var(--brun);}
+.menu-tab.active{color:var(--brun);border-bottom-color:var(--brun);}
+.menu-category{margin-bottom:72px;}
+.category-heading{font-family:'Libre Baskerville',serif;font-size:2rem;color:var(--brun);margin-bottom:6px;}
+.category-sub{font-family:'Cormorant',serif;font-style:italic;font-size:1rem;color:var(--texte-doux);margin-bottom:28px;}
+.category-rule{height:1px;background:rgba(92,34,24,0.18);margin-bottom:36px;}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.menu-entry{padding:24px 40px 24px 0;border-bottom:1px solid rgba(92,34,24,0.1);}
+.menu-entry:nth-child(even){padding-right:0;padding-left:40px;border-left:1px solid rgba(92,34,24,0.1);}
+.entry-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;}
+.entry-name{font-family:'Libre Baskerville',serif;font-size:1.1rem;color:var(--texte);}
+.entry-dots{flex:1;border-bottom:1px dotted rgba(92,34,24,0.3);margin:0 6px 4px;}
+.entry-price{font-family:'Cormorant',serif;font-size:1.1rem;color:var(--brun);white-space:nowrap;}
+.entry-desc{font-family:'Cormorant',serif;font-size:0.95rem;color:var(--texte-doux);line-height:1.6;}
+.entry-badge{display:inline-block;font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--brun);border:1px solid rgba(92,34,24,0.4);padding:2px 8px;margin-top:8px;}
 
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a { color: var(--creme); text-decoration: none; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
-  .nav-links a:hover { color: var(--or); }
+/* GALERIE */
+#galerie{background:var(--blanc);padding:100px 0 0;}
+.galerie-header{padding:0 72px 56px;}
+.gallery-mosaic{display:grid;grid-template-columns:3fr 2fr 2fr;grid-template-rows:300px 300px;gap:3px;}
+.gallery-cell{overflow:hidden;position:relative;background:var(--creme-alt);display:flex;align-items:center;justify-content:center;}
+.gallery-cell:first-child{grid-row:span 2;}
+.gallery-cell img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;display:block;}
+.gallery-cell:hover img{transform:scale(1.04);}
+.gallery-cell-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;}
+.gallery-cell-icon{font-size:2.2rem;opacity:0.2;}
+.gallery-cell-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--texte-doux);opacity:0.5;}
 
-  .nav-reserve {
-    background: var(--rouge); color: var(--creme);
-    padding: 10px 28px; border: none; font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase;
-    cursor: pointer; transition: background 0.3s; text-decoration: none;
-  }
-  .nav-reserve:hover { background: var(--rouge-clair); }
+/* RESERVATION */
+#reservation{background:var(--creme);padding:100px 72px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.resa-text .section-title,.resa-text .section-label{text-align:left;}
+.resa-text .section-sub{text-align:left;margin:0 0 32px;}
+.resa-detail{font-family:'Cormorant',serif;font-size:1rem;color:var(--texte-doux);line-height:2.1;margin-bottom:32px;}
+.resa-detail strong{color:var(--texte);font-weight:500;}
+.resa-detail a{color:var(--texte-doux);text-decoration:none;}
+.btn-resa{display:inline-flex;align-items:center;gap:12px;background:var(--brun);color:#FDFAF4;padding:18px 40px;border:none;font-family:'Jost',sans-serif;font-size:0.7rem;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;text-decoration:none;transition:all 0.25s;border-radius:2px;}
+.btn-resa:hover{background:var(--brun-clair);transform:translateY(-2px);box-shadow:0 8px 32px rgba(92,34,24,0.2);}
+.resa-card{background:var(--blanc);border:1px solid rgba(92,34,24,0.12);padding:48px;box-shadow:0 4px 40px rgba(0,0,0,0.06);}
+.resa-card-title{font-family:'Libre Baskerville',serif;font-style:italic;font-size:1.5rem;color:var(--brun);margin-bottom:24px;}
+.resa-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(92,34,24,0.08);font-family:'Cormorant',serif;font-size:1rem;}
+.resa-row:last-child{border-bottom:none;}
+.resa-row-label{color:var(--texte-doux);}
+.resa-row-val{color:var(--texte);font-weight:500;}
+.resa-row-val a{color:inherit;text-decoration:none;}
 
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    background: var(--charbon);
-  }
+/* CONTACT */
+#contact{background:var(--brun);padding:80px 72px;display:grid;grid-template-columns:repeat(3,1fr);gap:48px;}
+.contact-block-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:var(--brun-pale);margin-bottom:16px;}
+.contact-block-val{font-family:'Cormorant',serif;font-size:1rem;color:rgba(253,250,244,0.8);line-height:2.2;}
+.contact-block-val a{color:rgba(253,250,244,0.8);text-decoration:none;transition:color 0.2s;}
+.contact-block-val a:hover{color:#FDFAF4;}
 
-  .hero-bg {
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 40%, rgba(107,26,26,0.25) 0%, transparent 70%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23C9943A' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  }
+/* FOOTER */
+footer{background:var(--noir);padding:36px 72px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Libre Baskerville',serif;font-style:italic;font-size:1.1rem;color:var(--brun-pale);}
+.footer-copy{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.18);}
+.footer-admin a{font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.1);text-decoration:none;transition:color 0.2s;}
+.footer-admin a:hover{color:rgba(255,255,255,0.32);}
 
-  .ember {
-    position: absolute; border-radius: 50%;
-    animation: float-up linear infinite;
-    pointer-events: none;
-  }
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s ease,transform 0.7s ease;}
+.reveal.visible{opacity:1;transform:none;}
 
-  @keyframes float-up {
-    0% { transform: translateY(0) scale(1); opacity: 0.8; }
-    100% { transform: translateY(-120vh) scale(0); opacity: 0; }
-  }
+/* LOGIN MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(30,15,5,0.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--blanc);padding:52px;max-width:420px;width:90%;border:1px solid rgba(92,34,24,0.15);box-shadow:0 20px 80px rgba(0,0,0,0.18);animation:fadeUp 0.3s ease;}
+.modal h2{font-family:'Libre Baskerville',serif;font-size:1.7rem;color:var(--brun);margin-bottom:8px;font-style:italic;}
+.modal p{font-family:'Cormorant',serif;font-size:1rem;color:var(--texte-doux);margin-bottom:28px;}
+.mf-label{font-family:'Jost',sans-serif;font-size:0.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--texte-doux);display:block;margin-bottom:8px;}
+.mf-input{width:100%;border:1px solid rgba(92,34,24,0.22);background:var(--creme);color:var(--texte);padding:12px 16px;font-family:'Cormorant',serif;font-size:1rem;outline:none;transition:border-color 0.25s;margin-bottom:16px;}
+.mf-input:focus{border-color:var(--brun);}
+.modal-btns{display:flex;gap:10px;margin-top:8px;}
+.btn-login{flex:1;background:var(--brun);color:#FDFAF4;border:none;padding:13px;font-family:'Jost',sans-serif;font-size:0.7rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:background 0.25s;}
+.btn-login:hover{background:var(--brun-clair);}
+.btn-cancel{padding:13px 18px;background:transparent;border:1px solid rgba(92,34,24,0.2);color:var(--texte-doux);font-family:'Jost',sans-serif;font-size:0.7rem;cursor:pointer;transition:all 0.25s;}
+.btn-cancel:hover{border-color:var(--brun);color:var(--brun);}
+.login-error{font-family:'Jost',sans-serif;font-size:0.75rem;color:#c0392b;margin:-8px 0 12px;display:none;}
 
-  .hero-content { position: relative; text-align: center; padding: 0 20px; }
-
-  .hero-eyebrow {
-    font-size: 0.75rem; letter-spacing: 6px; text-transform: uppercase;
-    color: var(--or); margin-bottom: 24px;
-    animation: fadeUp 1s ease both;
-  }
-
-  .hero-logo-img {
-    width: 340px; max-width: 80vw;
-    filter: brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(-10deg) brightness(0.9);
-    margin-bottom: 32px;
-    animation: fadeUp 1s 0.2s ease both;
-  }
-
-  .hero-sub {
-    font-size: 1.25rem; font-weight: 300; letter-spacing: 3px;
-    color: rgba(245,237,216,0.7); margin-bottom: 48px;
-    animation: fadeUp 1s 0.4s ease both;
-  }
-
-  .hero-cta-group { display: flex; gap: 16px; justify-content: center; animation: fadeUp 1s 0.6s ease both; }
-
-  .btn-primary {
-    background: var(--rouge); color: var(--creme);
-    padding: 16px 40px; border: none; font-family: 'Cormorant Garamond', serif;
-    font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
-    cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
-  }
-  .btn-primary:hover { background: var(--rouge-clair); transform: translateY(-2px); }
-
-  .btn-outline {
-    background: transparent; color: var(--creme);
-    padding: 16px 40px; border: 1px solid rgba(245,237,216,0.4);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.9rem; letter-spacing: 3px; text-transform: uppercase;
-    cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
-  }
-  .btn-outline:hover { border-color: var(--or); color: var(--or); transform: translateY(-2px); }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* DIVIDER */
-  .divider {
-    display: flex; align-items: center; gap: 20px;
-    padding: 0 48px; margin: 48px 0;
-  }
-  .divider-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--or), transparent); }
-  .divider-icon { color: var(--or); font-size: 1.4rem; }
-
-  /* PLAT DU JOUR */
-  .plat-du-jour {
-    background: linear-gradient(135deg, var(--rouge) 0%, var(--brun) 100%);
-    padding: 64px 48px; text-align: center; position: relative; overflow: hidden;
-  }
-  .plat-du-jour::before {
-    content: ''; position: absolute; inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L40 20L20 40L0 20Z' fill='none' stroke='rgba(201,148,58,0.08)' stroke-width='1'/%3E%3C/svg%3E");
-    pointer-events: none;
-  }
-  .plat-label { font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; color: var(--or); margin-bottom: 12px; }
-  .plat-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 12px; }
-  .plat-desc { font-size: 1.1rem; font-weight: 300; color: rgba(245,237,216,0.8); max-width: 500px; margin: 0 auto 16px; }
-  .plat-price { font-size: 2rem; color: var(--or); font-style: italic; }
-
-  /* SECTIONS */
-  section { padding: 80px 48px; }
-
-  .section-label { font-size: 0.7rem; letter-spacing: 6px; text-transform: uppercase; color: var(--or); margin-bottom: 12px; }
-  .section-title { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 32px; }
-
-  /* MENU */
-  #menu { background: var(--fumee); }
-  .menu-tabs { display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
-  .menu-tab {
-    padding: 10px 28px; border: 1px solid rgba(201,148,58,0.3); background: transparent;
-    color: var(--creme); font-family: 'Cormorant Garamond', serif;
-    font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase;
-    cursor: pointer; transition: all 0.3s;
-  }
-  .menu-tab.active, .menu-tab:hover { background: var(--or); border-color: var(--or); color: var(--charbon); }
-
-  .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2px; }
-
-  .menu-item {
-    background: rgba(255,255,255,0.03); padding: 28px 32px;
-    border-left: 2px solid transparent; transition: all 0.3s;
-    display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
-  }
-  .menu-item:hover { background: rgba(201,148,58,0.05); border-left-color: var(--or); }
-  .menu-item-info { flex: 1; }
-  .menu-item-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; margin-bottom: 6px; }
-  .menu-item-desc { font-size: 0.9rem; color: rgba(245,237,216,0.6); line-height: 1.5; }
-  .menu-item-badge { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; background: var(--rouge); padding: 3px 8px; color: var(--creme); margin-top: 8px; display: inline-block; }
-  .menu-item-price { font-size: 1.3rem; color: var(--or); white-space: nowrap; font-style: italic; }
-
-  /* GALERIE */
-  #galerie { background: var(--charbon); }
-  .gallery-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: 280px 280px;
-    gap: 4px; margin-top: 32px;
-  }
-  .gallery-item {
-    overflow: hidden; position: relative;
-    background: var(--fumee);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .gallery-item:first-child { grid-row: span 2; }
-  .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
-  .gallery-item:hover img { transform: scale(1.05); }
-  .gallery-placeholder {
-    width: 100%; height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-size: 2.5rem; color: rgba(201,148,58,0.3);
-    gap: 12px;
-  }
-  .gallery-placeholder span { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.3); }
-
-  /* RÉSERVATION */
-  #reservation { background: var(--brun); text-align: center; }
-  .zenchef-container {
-    max-width: 700px; margin: 0 auto;
-    background: rgba(0,0,0,0.2); padding: 48px;
-    border: 1px solid rgba(201,148,58,0.2);
-  }
-  .zenchef-info { margin-bottom: 32px; }
-  .zenchef-info p { font-size: 1.1rem; color: rgba(245,237,216,0.75); line-height: 1.8; margin-bottom: 24px; }
-  .zenchef-btn {
-    display: inline-block;
-    background: var(--or); color: var(--charbon);
-    padding: 20px 52px; font-family: 'Playfair Display', serif;
-    font-size: 1.1rem; letter-spacing: 2px;
-    text-decoration: none; transition: all 0.3s;
-    font-style: italic;
-  }
-  .zenchef-btn:hover { background: var(--creme); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
-
-  /* FOOTER */
-  footer {
-    background: var(--charbon); border-top: 1px solid rgba(201,148,58,0.15);
-    padding: 48px; text-align: center;
-  }
-  .footer-logo { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--or); margin-bottom: 16px; font-style: italic; }
-  .footer-info { font-size: 0.9rem; color: rgba(245,237,216,0.5); line-height: 2; }
-  .footer-info a { color: var(--or); text-decoration: none; }
-  .admin-link { margin-top: 32px; }
-  .admin-link a { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: rgba(245,237,216,0.2); text-decoration: none; transition: color 0.3s; }
-  .admin-link a:hover { color: rgba(245,237,216,0.5); }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .nav-links { display: none; }
-    section { padding: 60px 20px; }
-    .section-title { font-size: 2rem; }
-    .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px 200px; }
-    .gallery-item:first-child { grid-row: span 1; grid-column: span 2; }
-    .plat-du-jour { padding: 48px 20px; }
-    .plat-title { font-size: 2rem; }
-    .zenchef-container { padding: 28px 20px; }
-    .hero-cta-group { flex-direction: column; align-items: center; }
-  }
-
-  /* MODAL ADMIN */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; z-index: 2000;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(4px);
-    align-items: center; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--fumee); border: 1px solid var(--or);
-    padding: 48px; max-width: 460px; width: 90%;
-    animation: fadeUp 0.3s ease;
-  }
-  .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; color: var(--or); margin-bottom: 8px; }
-  .modal p { font-size: 0.9rem; color: rgba(245,237,216,0.6); margin-bottom: 28px; }
-  .form-group { margin-bottom: 20px; }
-  .form-group label { display: block; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245,237,216,0.6); margin-bottom: 8px; }
-  .form-group input {
-    width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(201,148,58,0.3);
-    color: var(--creme); padding: 12px 16px; font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    outline: none; transition: border-color 0.3s;
-  }
-  .form-group input:focus { border-color: var(--or); }
-  .modal-btns { display: flex; gap: 12px; margin-top: 28px; }
-  .btn-modal-confirm {
-    flex: 1; background: var(--rouge); color: var(--creme); border: none;
-    padding: 14px; font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: background 0.3s;
-  }
-  .btn-modal-confirm:hover { background: var(--rouge-clair); }
-  .btn-modal-cancel {
-    padding: 14px 20px; background: transparent; border: 1px solid rgba(245,237,216,0.2);
-    color: rgba(245,237,216,0.5); font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    cursor: pointer; transition: all 0.3s;
-  }
-  .btn-modal-cancel:hover { border-color: rgba(245,237,216,0.5); color: var(--creme); }
-  .error-msg { color: #e74c3c; font-size: 0.85rem; margin-top: 8px; display: none; }
-
-  /* Flammes animation hero */
-  .flame-container { position: absolute; bottom: 0; width: 100%; display: flex; justify-content: space-around; pointer-events: none; }
-  .flame { width: 3px; background: linear-gradient(to top, var(--or), var(--rouge), transparent); animation: flicker 2s ease-in-out infinite alternate; border-radius: 50%; }
-  @keyframes flicker { 0% { height: 40px; opacity: 0.3; } 100% { height: 80px; opacity: 0.7; } }
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:0 24px;}.nav-links{display:none;}
+  .hero-content{padding:0 32px;}
+  #menu{padding:72px 28px;}
+  .menu-grid{grid-template-columns:1fr;}
+  .menu-entry:nth-child(even){padding-left:0;border-left:none;}
+  #reservation{grid-template-columns:1fr;padding:72px 28px;}
+  #contact{grid-template-columns:1fr;padding:60px 28px;}
+  .galerie-header{padding:0 28px 40px;}
+  .gallery-mosaic{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px;}
+  .gallery-cell:first-child{grid-row:span 1;grid-column:span 2;}
+  footer{padding:28px 28px;}
+}
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">La Côte</a>
+  <a href="#" class="nav-logo">La côte</a>
   <ul class="nav-links">
+    <li><a href="#home">Accueil</a></li>
     <li><a href="#menu">Menu</a></li>
-    <li><a href="#galerie">Galerie</a></li>
+    <li><a href="#plat">Plat du jour</a></li>
     <li><a href="#reservation">Réservation</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <a href="#reservation" class="nav-reserve">Réserver</a>
+  <a href="#reservation" class="nav-cta">Réserver</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero" id="home">
   <div class="hero-bg"></div>
-  <div id="embers"></div>
+  <div class="hero-photo" id="heroPhoto"></div>
+  <div class="hero-overlay"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Burgers &amp; Grillades au feu de bois</div>
-    <img src="logo.png" alt="La Côte" class="hero-logo-img" id="heroLogo">
-    <p class="hero-sub">Fumée · Caractère · Authenticité</p>
-    <div class="hero-cta-group">
-      <a href="#menu" class="btn-primary">Découvrir le menu</a>
-      <a href="#reservation" class="btn-outline">Réserver une table</a>
+    <p class="hero-eyebrow">Burgers au feu · Pujadas à fonte · Marseille</p>
+    <h1 class="hero-title">Le grill,<br><em>la fonte,</em><br>le bon goût.</h1>
+    <p class="hero-desc">À La Côte, nous célébrons deux feux : celui du grill pour des burgers d'exception, et celui qui anime la fonte de nos pujadas pour des plats mijotés à partager.</p>
+    <div class="hero-btns">
+      <a href="#reservation" class="btn-hero-reserve">Réserver une table &rsaquo;</a>
+      <a href="#menu" class="btn-hero-menu">Découvrir le menu</a>
     </div>
   </div>
-  <div class="flame-container" id="flames"></div>
 </section>
 
 <!-- PLAT DU JOUR -->
-<div class="plat-du-jour" id="platDuJour">
-  <div class="plat-label">✦ Aujourd'hui ✦</div>
-  <div class="plat-title" id="platName">Côte de Bœuf Pujadas</div>
-  <div class="plat-desc" id="platDesc">Grillade au barbecue Pujadas, beurre maître d'hôtel, gratin dauphinois maison</div>
-  <div class="plat-price" id="platPrice">28€</div>
+<div class="plat-banner" id="plat">
+  <span class="plat-label">✦ Plat du jour</span>
+  <div class="plat-sep"></div>
+  <div>
+    <div class="plat-nom" id="platNom">Côte de Bœuf Pujadas</div>
+    <div class="plat-detail" id="platDetail">Grillade au barbecue Pujadas · beurre maître d'hôtel · gratin dauphinois maison</div>
+  </div>
+  <div class="plat-sep"></div>
+  <div class="plat-prix" id="platPrix">28 €</div>
 </div>
 
 <!-- MENU -->
 <section id="menu">
-  <div class="section-label">Notre carte</div>
-  <h2 class="section-title">Le Menu</h2>
-  <div class="menu-tabs">
-    <button class="menu-tab active" onclick="filterMenu('burgers')">Burgers</button>
-    <button class="menu-tab" onclick="filterMenu('grillades')">Grillades</button>
-    <button class="menu-tab" onclick="filterMenu('entrees')">Entrées</button>
-    <button class="menu-tab" onclick="filterMenu('desserts')">Desserts</button>
-    <button class="menu-tab" onclick="filterMenu('boissons')">Boissons</button>
+  <div class="menu-header reveal">
+    <span class="section-label">La carte</span>
+    <h2 class="section-title">Notre menu</h2>
+    <p class="section-sub">Une carte courte, changeante au fil des saisons, où chaque plat est cuisiné à la commande à partir de produits choisis chez nos artisans.</p>
   </div>
-  <div class="menu-grid" id="menuGrid"></div>
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="switchTab('burgers',this)">Burgers grillés</button>
+    <button class="menu-tab" onclick="switchTab('grillades',this)">Grillades</button>
+    <button class="menu-tab" onclick="switchTab('entrees',this)">Entrées</button>
+    <button class="menu-tab" onclick="switchTab('desserts',this)">Desserts</button>
+    <button class="menu-tab" onclick="switchTab('boissons',this)">Boissons</button>
+  </div>
+  <div id="menuContent"></div>
 </section>
 
 <!-- GALERIE -->
 <section id="galerie">
-  <div class="section-label">En images</div>
-  <h2 class="section-title">La Côte en images</h2>
-  <div class="gallery-grid" id="galleryGrid">
-    <div class="gallery-item">
-      <div class="gallery-placeholder">🔥<span>Grillades</span></div>
-    </div>
-    <div class="gallery-item">
-      <div class="gallery-placeholder">🍔<span>Burgers</span></div>
-    </div>
-    <div class="gallery-item">
-      <div class="gallery-placeholder">🥩<span>Viandes</span></div>
-    </div>
-    <div class="gallery-item">
-      <div class="gallery-placeholder">🍷<span>Ambiance</span></div>
-    </div>
-    <div class="gallery-item">
-      <div class="gallery-placeholder">🌿<span>Terrasse</span></div>
-    </div>
+  <div class="galerie-header reveal">
+    <span class="section-label">En images</span>
+    <h2 class="section-title">La Côte en images</h2>
   </div>
+  <div class="gallery-mosaic" id="galleryGrid"></div>
 </section>
 
 <!-- RÉSERVATION -->
 <section id="reservation">
-  <div class="section-label">Table</div>
-  <h2 class="section-title" style="text-align:center">Réserver votre table</h2>
-  <div class="zenchef-container">
-    <div class="zenchef-info">
-      <p>Réservez directement en ligne via notre partenaire <strong>Zenchef</strong> — confirmez votre table en quelques clics, 24h/24.</p>
+  <div class="resa-text reveal">
+    <span class="section-label">Table</span>
+    <h2 class="section-title">Réserver<br>votre table</h2>
+    <p class="section-sub">Confirmez votre table en quelques clics via Zenchef, disponible 24h/24.</p>
+    <div class="resa-detail" id="resaDetail">
+      <strong>Adresse :</strong> 123 Rue du Marché, Marseille<br>
+      <strong>Tél :</strong> <a href="tel:+33000000000">00 00 00 00 00</a><br>
+      <strong>Email :</strong> <a href="mailto:contact@lacote.fr">contact@lacote.fr</a>
     </div>
-    <!-- Widget Zenchef — remplacez l'URL par votre identifiant Zenchef -->
-    <a href="https://www.zenchef.com/lacote" target="_blank" class="zenchef-btn" id="zenchefBtn">
-      🗓 Réserver ma table
-    </a>
-    <p style="margin-top: 20px; font-size:0.8rem; color:rgba(245,237,216,0.4); letter-spacing:1px;">
-      Ou appelez-nous au <a href="tel:+33000000000" style="color:var(--or)">00 00 00 00 00</a>
-    </p>
+    <a href="#" class="btn-resa" id="zenchefBtn">🗓 &nbsp;Réserver sur Zenchef</a>
+  </div>
+  <div class="resa-card reveal">
+    <div class="resa-card-title">Horaires d'ouverture</div>
+    <div class="resa-row"><span class="resa-row-label">Lundi – Vendredi</span><span class="resa-row-val">12h – 14h30</span></div>
+    <div class="resa-row"><span class="resa-row-label">Lundi – Samedi</span><span class="resa-row-val">19h – 22h30</span></div>
+    <div class="resa-row"><span class="resa-row-label">Dimanche</span><span class="resa-row-val">Fermé</span></div>
+    <br>
+    <div class="resa-card-title" style="font-size:1.1rem;margin-top:4px;">Nous trouver</div>
+    <div class="resa-row"><span class="resa-row-label">Adresse</span><span class="resa-row-val">123 Rue du Marché, Marseille</span></div>
+    <div class="resa-row"><span class="resa-row-label">Téléphone</span><span class="resa-row-val"><a href="tel:+33000000000">00 00 00 00 00</a></span></div>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="contact" style="background:var(--fumee); text-align:center;">
-  <div class="section-label">Nous trouver</div>
-  <h2 class="section-title">Contact &amp; Horaires</h2>
-  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:40px; max-width:800px; margin:0 auto; text-align:left;">
-    <div>
-      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Adresse</div>
-      <p style="line-height:2; color:rgba(245,237,216,0.75);" id="contactAdresse">123 Rue du Marché<br>Marseille, France</p>
-    </div>
-    <div>
-      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Horaires</div>
-      <p style="line-height:2; color:rgba(245,237,216,0.75);" id="contactHoraires">Lun–Sam : 12h – 14h30<br>Lun–Sam : 19h – 22h30<br>Dimanche : Fermé</p>
-    </div>
-    <div>
-      <div style="color:var(--or); font-size:0.7rem; letter-spacing:3px; text-transform:uppercase; margin-bottom:12px;">Contact</div>
-      <p style="line-height:2; color:rgba(245,237,216,0.75);">
-        <a href="tel:+33000000000" style="color:var(--or)">00 00 00 00 00</a><br>
-        <a href="mailto:contact@lacote.fr" style="color:var(--or)">contact@lacote.fr</a>
-      </p>
+<section id="contact">
+  <div>
+    <div class="contact-block-label">Adresse</div>
+    <div class="contact-block-val">123 Rue du Marché<br>Marseille, France</div>
+  </div>
+  <div>
+    <div class="contact-block-label">Horaires</div>
+    <div class="contact-block-val">Lun–Sam : 12h – 14h30<br>Lun–Sam : 19h – 22h30<br>Dimanche : Fermé</div>
+  </div>
+  <div>
+    <div class="contact-block-label">Contact</div>
+    <div class="contact-block-val">
+      <a href="tel:+33000000000">00 00 00 00 00</a><br>
+      <a href="mailto:contact@lacote.fr">contact@lacote.fr</a>
     </div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer>
-  <div class="footer-logo">La Côte</div>
-  <div class="footer-info">
-    Burgers &amp; Grillades au Barbecue Pujadas<br>
-    Marseille, France<br>
-    <a href="tel:+33000000000">00 00 00 00 00</a>
-  </div>
-  <div class="admin-link">
-    <a href="admin.html">⚙ Espace Administration</a>
-  </div>
+  <div class="footer-logo">La côte</div>
+  <div class="footer-copy">© 2025 La Côte — Burgers &amp; Grillades Pujadas</div>
+  <div class="footer-admin"><a href="admin.html" id="adminLink">⚙ Administration</a></div>
 </footer>
 
 <!-- MODAL LOGIN -->
-<div class="modal-overlay" id="adminModal">
+<div class="modal-overlay" id="loginModal">
   <div class="modal">
     <h2>Administration</h2>
     <p>Accès réservé au personnel du restaurant.</p>
-    <div class="form-group">
-      <label>Identifiant</label>
-      <input type="text" id="loginUser" placeholder="admin">
-    </div>
-    <div class="form-group">
-      <label>Mot de passe</label>
-      <input type="password" id="loginPass" placeholder="••••••">
-      <div class="error-msg" id="loginError">Identifiants incorrects.</div>
-    </div>
+    <label class="mf-label">Identifiant</label>
+    <input class="mf-input" type="text" id="mfUser" placeholder="admin">
+    <label class="mf-label">Mot de passe</label>
+    <input class="mf-input" type="password" id="mfPass" placeholder="••••••">
+    <div class="login-error" id="loginErr">Identifiants incorrects.</div>
     <div class="modal-btns">
-      <button class="btn-modal-confirm" onclick="doLogin()">Se connecter</button>
-      <button class="btn-modal-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-login" onclick="doLogin()">Se connecter</button>
+      <button class="btn-cancel" onclick="closeLogin()">Annuler</button>
     </div>
   </div>
 </div>
 
 <script>
-// ============================================================
-// DATA — stocké en localStorage (remplaçable par API backend)
-// ============================================================
-const DEFAULT_MENU = {
-  burgers: [
-    { name: "La Côte Burger", desc: "Bœuf Charolais, cheddar affiné, sauce maison, oignons confits", price: "16€", badge: "Signature" },
-    { name: "BBQ Pujadas", desc: "Double patty, bacon fumé, sauce BBQ maison, pickles", price: "18€" },
-    { name: "Le Veggie", desc: "Galette de légumes grillés, avocat, pesto, roquette", price: "14€" },
-    { name: "Truffe & Comté", desc: "Bœuf Wagyu, copeaux de truffe, Comté 18 mois", price: "24€", badge: "Premium" },
-  ],
-  grillades: [
-    { name: "Côte de Bœuf", desc: "800g, grillade Pujadas, beurre maître d'hôtel, pour 2 personnes", price: "52€", badge: "Pour 2" },
-    { name: "Entrecôte", desc: "Grillade Pujadas, sauce au poivre ou béarnaise, frites maison", price: "26€" },
-    { name: "Poulet Fermier", desc: "Demi-poulet fermier, marinade citron-herbes, grillé au charbon", price: "19€" },
-    { name: "Côtelettes d'Agneau", desc: "Rack d'agneau, croûte de persil, jus au thym", price: "28€", badge: "Spécialité" },
-  ],
-  entrees: [
-    { name: "Burrata & Tomates", desc: "Burrata crémeuse, tomates anciennes, basilic frais, huile d'olive", price: "11€" },
-    { name: "Os à Moelle", desc: "Os à moelle rôti, persillade, pain grillé au charbon", price: "9€" },
-    { name: "Salade César", desc: "Romaine, poulet grillé, parmesan, croûtons maison", price: "13€" },
-  ],
-  desserts: [
-    { name: "Fondant Chocolat", desc: "Cœur coulant, glace vanille Bourbon, pralin", price: "8€" },
-    { name: "Crème Brûlée", desc: "Vanille de Madagascar, caramel à la cassonade", price: "7€" },
-    { name: "Tarte Tatin", desc: "Pommes caramélisées, pâte feuilletée, crème fraîche", price: "8€" },
-  ],
-  boissons: [
-    { name: "Sélection Vins", desc: "Rouge, blanc, rosé — demandez notre carte des vins", price: "à partir de 5€" },
-    { name: "Bières Artisanales", desc: "Sélection locale, blonde, brune, IPA", price: "4–6€" },
-    { name: "Limonades Maison", desc: "Citron-gingembre, fraise-basilic, menthe-concombre", price: "4€" },
-  ]
+/* DATA */
+const MENU_DEF={
+  burgers:{titre:'Burgers grillés',sous:'Pain artisanal grillé, viande maturée, cuisson au feu de bois',items:[
+    {name:'La Côte Signature',desc:'Bœuf maturé 40j, cheddar affiné, oignon confit, sauce maison',price:'18 €',badge:'Signature'},
+    {name:'Le Pujadas Burger',desc:"Bœuf, confit d'oignons au vin rouge, comté 18 mois, roquette",price:'19 €'},
+    {name:'Le Fumé',desc:'Poitrine fumée, cheddar, sauce barbecue artisanale, cornichons',price:'17 €'},
+    {name:'Le Végétal',desc:'Galette de légumes grillés, chèvre frais, pesto roquette, tomate confite',price:'16 €'},
+    {name:'Le Forestier',desc:"Bœuf, champignons sauvages poêlés, fourme d'Ambert, échalotes",price:'19 €'},
+  ]},
+  grillades:{titre:'Grillades',sous:'Cuisson au barbecue Pujadas à fonte, au feu de bois',items:[
+    {name:'Côte de Bœuf',desc:"800g pour 2, grillade Pujadas, beurre maître d'hôtel, gratin dauphinois",price:'52 €',badge:'Pour 2'},
+    {name:'Entrecôte',desc:'Sauce au poivre ou béarnaise, frites maison',price:'26 €'},
+    {name:'Poulet Fermier',desc:'Demi-poulet, marinade citron-herbes, grillé au charbon',price:'19 €'},
+    {name:"Côtelettes d'Agneau",desc:"Rack d'agneau, croûte de persil, jus au thym",price:'28 €',badge:'Spécialité'},
+  ]},
+  entrees:{titre:'Entrées',sous:"Pour commencer dans les règles de l'art",items:[
+    {name:'Burrata & Tomates',desc:"Burrata crémeuse, tomates anciennes, basilic, huile d'olive",price:'11 €'},
+    {name:'Os à Moelle',desc:'Os à moelle rôti, persillade, pain grillé au charbon',price:'9 €'},
+    {name:'Salade César',desc:'Romaine, poulet grillé, parmesan, croûtons maison',price:'13 €'},
+  ]},
+  desserts:{titre:'Desserts',sous:'Pour finir en beauté',items:[
+    {name:'Fondant Chocolat',desc:'Cœur coulant, glace vanille Bourbon, pralin',price:'8 €'},
+    {name:'Crème Brûlée',desc:'Vanille de Madagascar, caramel à la cassonade',price:'7 €'},
+    {name:'Tarte Tatin',desc:'Pommes caramélisées, pâte feuilletée, crème fraîche',price:'8 €'},
+  ]},
+  boissons:{titre:'Boissons',sous:'Vins, bières artisanales et softs maison',items:[
+    {name:'Carte des vins',desc:'Sélection rouge, blanc, rosé — demandez notre cave',price:'à partir de 5 €'},
+    {name:'Bières Artisanales',desc:'Sélection locale blonde, brune, IPA',price:'4 – 6 €'},
+    {name:'Limonades Maison',desc:'Citron-gingembre, fraise-basilic, menthe-concombre',price:'4 €'},
+  ]}
 };
+const PLAT_DEF={nom:'Côte de Bœuf Pujadas',detail:"Grillade au barbecue Pujadas · beurre maître d'hôtel · gratin dauphinois maison",prix:'28 €'};
 
-const DEFAULT_PLAT = { name: "Côte de Bœuf Pujadas", desc: "Grillade au barbecue Pujadas, beurre maître d'hôtel, gratin dauphinois maison", price: "28€" };
+function gd(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}}
+function sd(k,v){localStorage.setItem(k,JSON.stringify(v));}
 
-function getData(key, def) {
-  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }
-  catch { return def; }
+/* PLAT */
+function loadPlat(){
+  const p=gd('lacote_plat',PLAT_DEF);
+  document.getElementById('platNom').textContent=p.nom||p.name||PLAT_DEF.nom;
+  document.getElementById('platDetail').textContent=p.detail||p.desc||PLAT_DEF.detail;
+  document.getElementById('platPrix').textContent=p.prix||p.price||PLAT_DEF.prix;
 }
 
-// ============================================================
-// RENDER MENU
-// ============================================================
-let currentCat = 'burgers';
-function filterMenu(cat) {
-  currentCat = cat;
-  document.querySelectorAll('.menu-tab').forEach((t, i) => {
-    t.classList.toggle('active', ['burgers','grillades','entrees','desserts','boissons'][i] === cat);
-  });
+/* MENU */
+let currentCat='burgers';
+function switchTab(cat,btn){
+  currentCat=cat;
+  document.querySelectorAll('.menu-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
   renderMenu();
 }
-function renderMenu() {
-  const menu = getData('lacote_menu', DEFAULT_MENU);
-  const items = menu[currentCat] || [];
-  const grid = document.getElementById('menuGrid');
-  grid.innerHTML = items.map(item => `
-    <div class="menu-item">
-      <div class="menu-item-info">
-        <div class="menu-item-name">${item.name}</div>
-        <div class="menu-item-desc">${item.desc}</div>
-        ${item.badge ? `<span class="menu-item-badge">${item.badge}</span>` : ''}
+function renderMenu(){
+  const stored=gd('lacote_menu',null);
+  const src=stored||MENU_DEF;
+  const cat=src[currentCat]||MENU_DEF[currentCat];
+  const items=cat.items||[];
+  document.getElementById('menuContent').innerHTML=`
+    <div class="menu-category">
+      <h3 class="category-heading">${cat.titre}</h3>
+      <p class="category-sub">${cat.sous}</p>
+      <div class="category-rule"></div>
+      <div class="menu-grid">
+        ${items.map(item=>`
+          <div class="menu-entry">
+            <div class="entry-top">
+              <span class="entry-name">${item.name}</span>
+              <span class="entry-dots"></span>
+              <span class="entry-price">${item.price}</span>
+            </div>
+            <div class="entry-desc">${item.desc}</div>
+            ${item.badge?`<span class="entry-badge">${item.badge}</span>`:''}
+          </div>`).join('')}
       </div>
-      <div class="menu-item-price">${item.price}</div>
-    </div>
-  `).join('');
-}
-
-// ============================================================
-// PLAT DU JOUR
-// ============================================================
-function renderPlat() {
-  const plat = getData('lacote_plat', DEFAULT_PLAT);
-  document.getElementById('platName').textContent = plat.name;
-  document.getElementById('platDesc').textContent = plat.desc;
-  document.getElementById('platPrice').textContent = plat.price;
-}
-
-// ============================================================
-// GALLERY
-// ============================================================
-function renderGallery() {
-  const photos = getData('lacote_gallery', []);
-  const grid = document.getElementById('galleryGrid');
-  const placeholders = [
-    { icon:'🔥', label:'Grillades' }, { icon:'🍔', label:'Burgers' },
-    { icon:'🥩', label:'Viandes' }, { icon:'🍷', label:'Ambiance' },
-    { icon:'🌿', label:'Terrasse' }
-  ];
-  grid.innerHTML = placeholders.map((p, i) => {
-    const photo = photos[i];
-    return `<div class="gallery-item">
-      ${photo ? `<img src="${photo}" alt="Photo ${i+1}">` : `<div class="gallery-placeholder">${p.icon}<span>${p.label}</span></div>`}
     </div>`;
-  }).join('');
 }
 
-// ============================================================
-// LOGO
-// ============================================================
-function loadLogo() {
-  const logoB64 = getData('lacote_logo', null);
-  if (logoB64) document.getElementById('heroLogo').src = logoB64;
+/* GALLERY */
+function renderGallery(){
+  const photos=gd('lacote_gallery',[]);
+  const labels=[{icon:'🔥',label:'Grillades'},{icon:'🍔',label:'Burgers'},{icon:'🥩',label:'Viandes'},{icon:'🍷',label:'Ambiance'},{icon:'🌿',label:'Terrasse'}];
+  document.getElementById('galleryGrid').innerHTML=labels.map((l,i)=>
+    photos[i]?`<div class="gallery-cell"><img src="${photos[i]}" alt="${l.label}"></div>`
+    :`<div class="gallery-cell"><div class="gallery-cell-inner"><div class="gallery-cell-icon">${l.icon}</div><div class="gallery-cell-label">${l.label}</div></div></div>`
+  ).join('');
 }
 
-// ============================================================
-// EMBERS ANIMATION
-// ============================================================
-function createEmbers() {
-  const container = document.getElementById('embers');
-  setInterval(() => {
-    const e = document.createElement('div');
-    e.className = 'ember';
-    const size = Math.random() * 4 + 2;
-    e.style.cssText = `
-      width:${size}px; height:${size}px;
-      left:${Math.random()*100}vw; bottom:0;
-      background:${Math.random()>0.5?'var(--or)':'var(--rouge)'};
-      animation-duration:${Math.random()*4+3}s;
-      opacity:${Math.random()*0.6+0.2};
-    `;
-    container.appendChild(e);
-    setTimeout(() => e.remove(), 7000);
-  }, 300);
-}
+/* ZENCHEF & LOGO */
+function loadZenchef(){document.getElementById('zenchefBtn').href=gd('lacote_zenchef_url','https://www.zenchef.com/lacote');}
+function loadHeroPhoto(){const logo=gd('lacote_logo',null);if(logo){const el=document.getElementById('heroPhoto');el.style.backgroundImage=`url(${logo})`;el.classList.add('loaded');}}
 
-// ============================================================
-// FLAMES
-// ============================================================
-function createFlames() {
-  const c = document.getElementById('flames');
-  for(let i=0;i<30;i++){
-    const f=document.createElement('div');
-    f.className='flame';
-    f.style.cssText=`height:${Math.random()*60+20}px;animation-delay:${Math.random()*2}s;animation-duration:${Math.random()*1.5+1}s;opacity:${Math.random()*0.4+0.1}`;
-    c.appendChild(f);
-  }
-}
+/* NAV SCROLL */
+window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('shadow',window.scrollY>40));
 
-// ============================================================
-// NAVBAR SCROLL
-// ============================================================
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
-});
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 
-// ============================================================
-// LOGIN MODAL
-// ============================================================
-function openAdminModal() { document.getElementById('adminModal').classList.add('open'); }
-function closeModal() { document.getElementById('adminModal').classList.remove('open'); document.getElementById('loginError').style.display='none'; }
-function doLogin() {
-  const user = document.getElementById('loginUser').value;
-  const pass = document.getElementById('loginPass').value;
-  const creds = getData('lacote_admin_creds', { user: 'admin', pass: 'lacote2024' });
-  if(user === creds.user && pass === creds.pass) {
-    localStorage.setItem('lacote_auth', '1');
-    window.location.href = 'admin.html';
-  } else {
-    document.getElementById('loginError').style.display = 'block';
-  }
-}
-
-document.querySelector('.admin-link a').addEventListener('click', e => {
+/* LOGIN */
+document.getElementById('adminLink').addEventListener('click',e=>{
   e.preventDefault();
-  if(localStorage.getItem('lacote_auth') === '1') window.location.href = 'admin.html';
-  else openAdminModal();
+  if(localStorage.getItem('lacote_auth')==='1')window.location.href='admin.html';
+  else document.getElementById('loginModal').classList.add('open');
 });
-
-document.getElementById('loginPass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
-document.getElementById('adminModal').addEventListener('click', e => { if(e.target===e.currentTarget) closeModal(); });
-
-// ============================================================
-// ZENCHEF — remplacez l'URL par votre identifiant
-// ============================================================
-function setupZenchef() {
-  const zid = getData('lacote_zenchef_url', 'https://www.zenchef.com/lacote');
-  document.getElementById('zenchefBtn').href = zid;
+function closeLogin(){document.getElementById('loginModal').classList.remove('open');document.getElementById('loginErr').style.display='none';}
+function doLogin(){
+  const u=document.getElementById('mfUser').value;
+  const p=document.getElementById('mfPass').value;
+  const c=gd('lacote_admin_creds',{user:'admin',pass:'lacote2024'});
+  if(u===c.user&&p===c.pass){localStorage.setItem('lacote_auth','1');window.location.href='admin.html';}
+  else document.getElementById('loginErr').style.display='block';
 }
+document.getElementById('mfPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('loginModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeLogin();});
 
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  renderPlat();
-  renderMenu();
-  renderGallery();
-  loadLogo();
-  createEmbers();
-  createFlames();
-  setupZenchef();
-});
+/* INIT */
+loadPlat();renderMenu();renderGallery();loadZenchef();loadHeroPhoto();
 </script>
 </body>
 </html>
