@@ -279,9 +279,18 @@ new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList
 
 const menuToggle = document.getElementById('menu-toggle');
   const navLinks = document.getElementById('nav-links');
+  const navItems = document.querySelectorAll('.nav-links a');
 
+  // Ouvrir / fermer menu
   menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('active');
+  });
+
+  // Fermer menu après clic sur un lien
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
   });
 
 // Plat du jour
