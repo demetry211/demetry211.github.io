@@ -21,7 +21,7 @@ nav.shadow{box-shadow:0 4px 24px rgba(0,0,0,0.08);}
 .nav-cta:hover{background:var(--brun-clair);}
 .hero{margin-top:64px;position:relative;height:calc(100vh - 64px);min-height:560px;overflow:hidden;}
 .hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3D1A0A 0%,#7A3010 30%,#C06020 55%,#5A2A10 75%,#1A0A04 100%);}
-.hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 0.6s;}
+.hero-photo{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity 0.6s;source:'/images/bg.png'}
 .hero-photo.loaded{opacity:1;}
 .hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(10,5,2,0.72) 0%,rgba(10,5,2,0.35) 55%,rgba(10,5,2,0.1) 100%);}
 .hero-content{position:relative;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 80px;max-width:780px;}
@@ -102,32 +102,13 @@ footer{background:var(--noir);padding:36px 72px;display:flex;align-items:center;
 .reveal{opacity:0;transform:translateY(24px);transition:opacity 0.7s,transform 0.7s;}
 .reveal.visible{opacity:1;transform:none;}
 @media(max-width:960px){nav{padding:0 24px;}.nav-links{display:none;}.hero-content{padding:0 32px;}#menu{padding:72px 28px;}.menu-grid{grid-template-columns:1fr;}.menu-entry:nth-child(even){padding-left:0;border-left:none;}#reservation{grid-template-columns:1fr;padding:72px 28px;}#contact{grid-template-columns:1fr;padding:60px 28px;}.galerie-header{padding:0 28px 40px;}.gallery-mosaic{grid-template-columns:1fr 1fr;grid-template-rows:200px 200px 200px;}.gallery-cell:first-child{grid-row:span 1;grid-column:span 2;}footer{padding:28px;}}
-/* NAVBAR */
-#navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 30px;
-}
 
-.nav-logo,
-.nav-links a,
-.nav-cta {
-  color: white;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-}
 
 /* Bouton hamburger caché en desktop */
 .menu-toggle {
   display: none;
   font-size: 28px;
-  background: none;
+  background: --creme;
   border: none;
   color: white;
   cursor: pointer;
