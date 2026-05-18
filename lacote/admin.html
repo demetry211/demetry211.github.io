@@ -140,7 +140,81 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
 .sec-list strong{color:var(--texte);font-style:normal;}
 
 @media(max-width:900px){.sidebar{width:200px;}.main{margin-left:200px;padding:28px 24px;}.stats-grid{grid-template-columns:1fr 1fr;}.form-row{grid-template-columns:1fr;}.photo-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:640px){.sidebar{display:none;}.main{margin-left:0;}}
+
+/* ── MOBILE : sidebar en drawer ──────────────────────────── */
+@media(max-width:640px){
+  body{display:block;}
+
+  /* Sidebar = drawer off-canvas */
+  .sidebar{
+    width:240px;
+    transform:translateX(-100%);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+    box-shadow:none;
+  }
+  .sidebar.open{
+    transform:translateX(0);
+    box-shadow:4px 0 32px rgba(0,0,0,0.18);
+  }
+
+  /* Overlay sombre derrière le drawer */
+  .sb-overlay{
+    display:none;
+    position:fixed;inset:0;
+    z-index:99;
+    background:rgba(30,15,5,0.45);
+    backdrop-filter:blur(2px);
+  }
+  .sb-overlay.show{display:block;}
+
+  /* Barre top mobile */
+  .mobile-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:56px;
+    padding:0 16px;
+    background:var(--blanc);
+    border-bottom:1px solid rgba(92,34,24,0.12);
+    position:sticky;top:0;z-index:98;
+  }
+  .mobile-topbar-logo{
+    font-family:'Libre Baskerville',serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color:var(--brun);
+    text-decoration:none;
+  }
+
+  /* Bouton hamburger dans la topbar */
+  .sb-toggle{
+    display:flex;flex-direction:column;justify-content:center;gap:5px;
+    width:36px;height:36px;background:none;border:none;cursor:pointer;padding:4px;
+  }
+  .sb-toggle span{
+    display:block;height:1.5px;background:var(--brun);border-radius:2px;
+    transition:transform .3s,opacity .2s,width .2s;
+  }
+  .sb-toggle span:nth-child(1){width:100%;}
+  .sb-toggle span:nth-child(2){width:65%;}
+  .sb-toggle span:nth-child(3){width:100%;}
+  .sb-toggle.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg);width:100%;}
+  .sb-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0);}
+  .sb-toggle.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg);width:100%;}
+
+  .main{
+    margin-left:0;
+    padding:24px 16px;
+    min-height:calc(100vh - 56px);
+  }
+
+  .stats-grid{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .photo-grid{grid-template-columns:1fr 1fr;}
+  .quick-grid{grid-template-columns:1fr 1fr;}
+  .page-title{font-size:1.5rem;}
+  .dt th:nth-child(3),.dt td:nth-child(3){display:none;} /* masque col Badge sur mobile */
+}
 </style>
 </head>
 <body>
@@ -159,6 +233,17 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
     <button class="btn-lf" id="lfBtn" onclick="doLogin()">Se connecter</button>
     <a href="index.html" class="l-back">← Retour au site</a>
   </div>
+</div>
+
+<!-- OVERLAY sidebar mobile -->
+<div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+
+<!-- TOPBAR mobile (visible seulement en CSS < 640px) -->
+<div class="mobile-topbar" id="mobileTopbar" style="display:none;">
+  <a href="index.html" class="mobile-topbar-logo">La côte</a>
+  <button class="sb-toggle" id="sbToggle" aria-label="Menu" onclick="toggleSidebar()">
+    <span></span><span></span><span></span>
+  </button>
 </div>
 
 <!-- SIDEBAR -->
@@ -584,6 +669,53 @@ async function changePassword(){
   document.getElementById('newPass').value='';document.getElementById('confirmPass').value='';
   alert$('aCpt','ok','✔ Mot de passe modifié avec succès.');
 }
+
+// ── Sidebar drawer mobile ───────────────────────────────────
+(function(){
+  const BREAKPOINT = 640;
+  const topbar  = document.getElementById('mobileTopbar');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sbOverlay');
+  const toggle  = document.getElementById('sbToggle');
+
+  function isMobile(){ return window.innerWidth <= BREAKPOINT; }
+
+  function updateTopbar(){
+    // La topbar n'est visible que sur mobile ET après connexion
+    const loggedIn = sidebar && sidebar.style.display !== 'none';
+    topbar.style.display = (isMobile() && loggedIn) ? 'flex' : 'none';
+  }
+
+  window.toggleSidebar = function(){
+    const open = sidebar.classList.toggle('open');
+    toggle.classList.toggle('open', open);
+    overlay.classList.toggle('show', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+
+  window.closeSidebar = function(){
+    sidebar.classList.remove('open');
+    toggle.classList.remove('open');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  };
+
+  // Fermer le drawer quand on clique sur un item de nav (mobile)
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => { if(isMobile()) closeSidebar(); });
+  });
+
+  // Observer les changements de visibilité de la sidebar (après login)
+  const obs = new MutationObserver(updateTopbar);
+  if(sidebar) obs.observe(sidebar, { attributes: true, attributeFilter: ['style'] });
+
+  window.addEventListener('resize', () => {
+    updateTopbar();
+    if(!isMobile()) closeSidebar();
+  });
+
+  updateTopbar();
+})();
 
 checkAuth();
 </script>
