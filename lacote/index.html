@@ -362,6 +362,7 @@ async function loadConfig(){
   }).join('');
   document.getElementById('cHoraires').innerHTML=horaires.map(l=>l.trim()).join('<br>');
   if(c.hero_url){const el=document.getElementById('heroPhoto');el.style.backgroundImage=`url(${c.hero_url})`;el.classList.add('loaded');}
+  if(c.logo_url){const img=document.querySelector('.nav-logo img');if(img)img.src=c.logo_url;}
 }
 
 document.querySelectorAll('.reveal').forEach(el=>
