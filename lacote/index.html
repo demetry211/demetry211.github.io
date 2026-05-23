@@ -47,47 +47,201 @@ nav.shadow{box-shadow:0 4px 24px rgba(0,0,0,0.08);}
 .section-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:5px;text-transform:uppercase;color:var(--texte-doux);margin-bottom:14px;display:block;text-align:center;}
 .section-title{font-family:'Libre Baskerville',serif;font-size:clamp(2rem,4vw,3.2rem);color:var(--brun);text-align:center;margin-bottom:20px;}
 .section-sub{font-weight:300;font-size:1.15rem;line-height:1.75;color:var(--texte-doux);text-align:center;max-width:640px;margin:0 auto;}
-/* ══ MENU — style carte parchemin steakhouse ══════════════════ */
-#menu{
-  background:#e8d9b5;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-  padding:100px 72px;position:relative;
-}
-#menu::before{content:'';position:absolute;inset:24px;border:1.5px solid rgba(155,53,53,0.35);border-radius:2px;pointer-events:none;}
+/* ══ MENU — effet carte papier physique (style Lana) ══════════ */
 
-.menu-header{margin-bottom:56px;text-align:center;}
-.menu-header .section-label{font-family:'Jost',sans-serif;font-size:0.58rem;letter-spacing:6px;text-transform:uppercase;color:#9B3535;margin-bottom:0;}
-.menu-header .section-title{font-family:'Libre Baskerville',serif;font-size:clamp(2.4rem,5vw,3.8rem);font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#8B1A1A;position:relative;display:inline-block;padding:0 40px;margin-bottom:0;}
-.menu-header .section-title::before,.menu-header .section-title::after{content:'◆';font-size:0.9rem;color:#9B3535;position:absolute;top:50%;transform:translateY(-50%);}
+/* Fond de scène : lin sombre qui fait ressortir le papier */
+#menu{
+  background: #2a1f14;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  padding: 100px 40px 120px;
+  position: relative;
+  overflow: visible;
+}
+
+/* Ombre ambiante derrière la carte */
+#menu::after{
+  content:'';
+  position:absolute;
+  inset:60px 80px;
+  background:rgba(0,0,0,0.55);
+  filter:blur(40px);
+  border-radius:4px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ── La "feuille" de papier centrale ── */
+.menu-paper{
+  position:relative;
+  z-index:1;
+  max-width:860px;
+  margin:0 auto;
+
+  /* Papier kraft vieilli */
+  background: #f0e6cc;
+  background-image:
+    /* Grain papier fin */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='500' height='500' filter='url(%23n)' opacity='0.11'/%3E%3C/svg%3E"),
+    /* Vignette coins brunis */
+    radial-gradient(ellipse at center, transparent 55%, rgba(120,70,20,0.18) 100%);
+
+  padding: 64px 72px 72px;
+  border-radius: 2px;
+
+  /* Ombre portée réaliste : multiple layers pour l'épaisseur */
+  box-shadow:
+    0 1px 1px rgba(0,0,0,0.15),
+    0 2px 2px rgba(0,0,0,0.12),
+    0 4px 8px rgba(0,0,0,0.12),
+    0 8px 24px rgba(0,0,0,0.18),
+    0 24px 64px rgba(0,0,0,0.25),
+    inset 0 0 0 1px rgba(120,70,20,0.12);
+}
+
+/* Pliure centrale simulée */
+.menu-paper::before{
+  content:'';
+  position:absolute;
+  top:0;bottom:0;
+  left:50%;
+  width:1px;
+  background:linear-gradient(to bottom,
+    transparent 0%,
+    rgba(120,70,20,0.08) 15%,
+    rgba(80,40,10,0.14) 50%,
+    rgba(120,70,20,0.08) 85%,
+    transparent 100%
+  );
+  pointer-events:none;
+}
+
+/* Coin corné en bas à droite */
+.menu-paper::after{
+  content:'';
+  position:absolute;
+  bottom:0; right:0;
+  width:42px; height:42px;
+  background:linear-gradient(
+    225deg,
+    #c8b48a 0%,
+    #c8b48a 45%,
+    rgba(0,0,0,0.18) 46%,
+    transparent 48%
+  );
+  border-top-left-radius:2px;
+}
+
+/* ── En-tête de la carte ── */
+.menu-header{ margin-bottom:44px; text-align:center; }
+
+.menu-header .section-label{
+  font-family:'Jost',sans-serif;
+  font-size:0.55rem;letter-spacing:7px;text-transform:uppercase;
+  color:#9B3535;margin-bottom:0;display:block;
+}
+.menu-header .section-title{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(2.2rem,4.5vw,3.4rem);
+  font-weight:700;letter-spacing:0.16em;text-transform:uppercase;
+  color:#6B1010;
+  position:relative;display:inline-block;
+  padding:0 40px;margin-bottom:0;
+}
+.menu-header .section-title::before,
+.menu-header .section-title::after{
+  content:'◆';font-size:0.85rem;color:#9B3535;
+  position:absolute;top:50%;transform:translateY(-50%);
+}
 .menu-header .section-title::before{left:0;}
 .menu-header .section-title::after{right:0;}
-.menu-header-sep{display:flex;align-items:center;justify-content:center;gap:12px;margin:10px 0 0;}
-.menu-header-sep::before,.menu-header-sep::after{content:'';flex:1;max-width:120px;height:1px;background:rgba(155,53,53,0.5);}
-.menu-header-sep span{color:#9B3535;font-size:0.7rem;letter-spacing:4px;text-transform:uppercase;font-family:'Jost',sans-serif;}
 
-.menu-tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;margin-bottom:52px;border-bottom:none;}
-.menu-tab{padding:9px 22px;background:transparent;border:1px solid rgba(155,53,53,0.3);font-family:'Jost',sans-serif;font-size:0.62rem;letter-spacing:3px;text-transform:uppercase;color:#9B3535;cursor:pointer;transition:all 0.25s;white-space:nowrap;border-radius:1px;margin-bottom:0;}
-.menu-tab:hover{background:rgba(155,53,53,0.08);color:#8B1A1A;border-color:#9B3535;}
-.menu-tab.active{background:#8B1A1A;color:#F2EBD9;border-color:#8B1A1A;}
+.menu-header-sep{
+  display:flex;align-items:center;justify-content:center;
+  gap:12px;margin:10px 0 0;
+}
+.menu-header-sep::before,
+.menu-header-sep::after{
+  content:'';flex:1;max-width:100px;
+  height:1px;background:rgba(155,53,53,0.4);
+}
+.menu-header-sep span{
+  color:#9B3535;font-size:0.7rem;letter-spacing:4px;
+  text-transform:uppercase;font-family:'Jost',sans-serif;
+}
 
-.category-heading{font-family:'Libre Baskerville',serif;font-size:clamp(1.6rem,3vw,2.6rem);font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#8B1A1A;margin-bottom:4px;text-align:center;}
-.category-sub-txt{font-family:'Cormorant',serif;font-style:italic;font-size:1.05rem;color:#9B3535;margin-bottom:20px;text-align:center;}
-.category-rule{display:flex;align-items:center;justify-content:center;gap:10px;margin:0 0 36px;}
-.category-rule::before{content:'';flex:1;height:1px;background:rgba(155,53,53,0.4);}
-.category-rule::after{content:'◆';flex:0;font-size:0.65rem;color:#9B3535;}
+/* ── Onglets catégories ── */
+.menu-tabs{
+  display:flex;justify-content:center;flex-wrap:wrap;
+  gap:4px;margin-bottom:44px;border-bottom:none;
+}
+.menu-tab{
+  padding:8px 20px;background:transparent;
+  border:1px solid rgba(155,53,53,0.3);
+  font-family:'Jost',sans-serif;font-size:0.6rem;
+  letter-spacing:3px;text-transform:uppercase;
+  color:#9B3535;cursor:pointer;
+  transition:all 0.25s;white-space:nowrap;border-radius:1px;
+}
+.menu-tab:hover{ background:rgba(155,53,53,0.08);color:#6B1010;border-color:#9B3535; }
+.menu-tab.active{ background:#6B1010;color:#f0e6cc;border-color:#6B1010; }
 
-.menu-grid{display:grid;grid-template-columns:1fr;max-width:720px;margin:0 auto;}
+/* ── Catégorie ── */
+.category-heading{
+  font-family:'Libre Baskerville',serif;
+  font-size:clamp(1.5rem,2.8vw,2.2rem);
+  font-weight:700;letter-spacing:0.13em;text-transform:uppercase;
+  color:#6B1010;margin-bottom:4px;text-align:center;
+}
+.category-sub-txt{
+  font-family:'Cormorant',serif;font-style:italic;
+  font-size:1.05rem;color:#9B3535;margin-bottom:16px;text-align:center;
+}
+.category-rule{
+  display:flex;align-items:center;justify-content:center;
+  gap:10px;margin:0 0 32px;
+}
+.category-rule::before{ content:'';flex:1;height:1px;background:rgba(155,53,53,0.3); }
+.category-rule::after{ content:'◆';flex:0;font-size:0.6rem;color:#9B3535; }
 
-.menu-entry{padding:28px 0;position:relative;}
-.menu-entry+.menu-entry::before{content:'';display:block;height:1px;background:rgba(155,53,53,0.25);margin-bottom:28px;}
-.menu-entry+.menu-entry::after{content:'◆';position:absolute;top:0;left:50%;transform:translate(-50%,-50%);color:#9B3535;font-size:0.65rem;background:#e8d9b5;padding:0 6px;}
+/* ── Grille articles ── */
+.menu-grid{ display:grid;grid-template-columns:1fr;max-width:640px;margin:0 auto; }
 
-.entry-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px;}
-.entry-name{font-family:'Jost',sans-serif;font-size:0.78rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;color:#8B1A1A;}
-.entry-dots{flex:1;border-bottom:1px dotted rgba(155,53,53,0.25);margin:0 8px 4px;}
-.entry-price{font-family:'Libre Baskerville',serif;font-size:1.15rem;color:#8B1A1A;white-space:nowrap;font-weight:400;}
-.entry-desc{font-family:'Cormorant',serif;font-size:1.05rem;font-weight:300;color:#6B3030;line-height:1.65;font-style:italic;}
-.entry-badge{display:inline-block;font-family:'Jost',sans-serif;font-size:0.55rem;letter-spacing:2px;text-transform:uppercase;color:#9B3535;border:1px solid rgba(155,53,53,0.45);padding:2px 10px;margin-top:10px;}
+.menu-entry{ padding:24px 0;position:relative; }
+.menu-entry+.menu-entry::before{
+  content:'';display:block;
+  height:1px;background:rgba(155,53,53,0.18);margin-bottom:24px;
+}
+.menu-entry+.menu-entry::after{
+  content:'◆';position:absolute;top:0;left:50%;
+  transform:translate(-50%,-50%);
+  color:#9B3535;font-size:0.6rem;
+  background:#f0e6cc;padding:0 6px;
+}
+
+.entry-top{
+  display:flex;justify-content:space-between;
+  align-items:baseline;gap:16px;margin-bottom:8px;
+}
+.entry-name{
+  font-family:'Jost',sans-serif;font-size:0.75rem;font-weight:500;
+  letter-spacing:3px;text-transform:uppercase;color:#6B1010;
+}
+.entry-dots{ flex:1;border-bottom:1px dotted rgba(155,53,53,0.2);margin:0 8px 4px; }
+.entry-price{
+  font-family:'Libre Baskerville',serif;
+  font-size:1.1rem;color:#6B1010;white-space:nowrap;font-weight:400;
+}
+.entry-desc{
+  font-family:'Cormorant',serif;font-size:1.05rem;font-weight:300;
+  color:#7a4040;line-height:1.65;font-style:italic;
+}
+.entry-badge{
+  display:inline-block;font-family:'Jost',sans-serif;
+  font-size:0.52rem;letter-spacing:2px;text-transform:uppercase;
+  color:#9B3535;border:1px solid rgba(155,53,53,0.4);
+  padding:2px 10px;margin-top:8px;
+}
 #galerie{background:var(--blanc);padding:100px 0 0;}
 .galerie-header{padding:0 72px 56px;}
 .gallery-mosaic{display:grid;grid-template-columns:3fr 2fr 2fr;grid-template-rows:300px 300px;gap:3px;}
@@ -149,8 +303,11 @@ footer{background:var(--noir);padding:36px 72px;display:flex;align-items:center;
   .nav-cta{display:none;}
   .burger{display:flex;}
   .hero-content{padding:0 32px;}
-  #menu{padding:72px 28px;}
-  #menu::before{inset:12px;}
+  #menu{padding:48px 16px 72px;}
+  #menu::after{inset:20px 20px;filter:blur(20px);}
+  .menu-paper{padding:40px 24px 52px;}
+  .menu-paper::before{display:none;}/* pliure cachée sur mobile */
+  .menu-paper::after{width:28px;height:28px;}
   .menu-grid{grid-template-columns:1fr;}
   .menu-entry:nth-child(even){padding-left:0;border-left:none;}
   #reservation{grid-template-columns:1fr;padding:72px 28px;}
@@ -214,14 +371,16 @@ footer{background:var(--noir);padding:36px 72px;display:flex;align-items:center;
 </div>
 
 <section id="menu">
+  <div class="menu-paper">
   <div class="menu-header reveal">
     <span class="section-label">La carte</span>
     <h2 class="section-title">Notre menu</h2>
     <div class="menu-header-sep"><span>✦</span></div>
-    <p class="section-sub">Une carte courte, changeante au fil des saisons, où chaque plat est cuisiné à la commande à partir de produits choisis chez nos artisans.</p>
+    <p class="section-sub" style="color:#7a4040;max-width:480px;margin:16px auto 0;font-family:'Cormorant',serif;font-style:italic;font-size:1.05rem;">Une carte courte, changeante au fil des saisons, où chaque plat est cuisiné à la commande à partir de produits choisis chez nos artisans.</p>
   </div>
   <div class="menu-tabs" id="menuTabs"></div>
   <div id="menuContent"></div>
+  </div>
 </section>
 
 <section id="galerie">
