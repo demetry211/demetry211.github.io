@@ -368,14 +368,39 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
     <div class="page-header"><h1 class="page-title">Configuration</h1><p class="page-sub">Informations affichées sur le site public.</p></div>
     <div id="aCfg" class="alert"></div>
     <div class="card">
-      <div class="card-title">Photo principale (Hero)</div>
-      <p style="font-size:0.95rem;color:var(--texte-doux);margin-bottom:16px;font-style:italic;">Arrière-plan de la page d'accueil. Recommandé : burger signature ou grill Pujadas en action.</p>
-      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-        <input type="file" id="heroFile" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="prevHero(this)">
-        <img id="heroPreview" src="" style="max-width:200px;max-height:110px;display:none;border:1px solid rgba(139,26,26,0.15);object-fit:cover;">
-        <div style="display:flex;gap:10px;">
-          <button class="btn btn-g" onclick="document.getElementById('heroFile').click()">📁 Choisir</button>
-          <button class="btn btn-p" id="btnHero" onclick="uploadHero()">☁️ Envoyer</button>
+      <div class="card-title">Bannière principale (Hero)</div>
+      <p style="font-size:0.95rem;color:var(--texte-doux);margin-bottom:20px;font-style:italic;">Choisissez entre une photo statique ou une vidéo en boucle pour l'arrière-plan de la page d'accueil.</p>
+      <!-- Toggle image / vidéo -->
+      <div style="display:flex;gap:8px;margin-bottom:24px;">
+        <button class="btn btn-p" id="btnModeImg" onclick="setHeroMode('image')" style="padding:8px 20px;font-size:0.7rem;letter-spacing:2px;">🖼 IMAGE</button>
+        <button class="btn btn-g" id="btnModeVid" onclick="setHeroMode('video')" style="padding:8px 20px;font-size:0.7rem;letter-spacing:2px;">🎬 VIDÉO</button>
+      </div>
+      <!-- Bloc image -->
+      <div id="heroImageBlock">
+        <p style="font-size:0.88rem;color:var(--texte-doux);margin-bottom:14px;">Formats : JPG, PNG, WebP · Recommandé : 1920×1080px</p>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <input type="file" id="heroFile" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="prevHero(this)">
+          <img id="heroPreview" src="" style="max-width:200px;max-height:110px;display:none;border:1px solid rgba(139,26,26,0.15);object-fit:cover;">
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-g" onclick="document.getElementById('heroFile').click()">📁 Choisir</button>
+            <button class="btn btn-p" id="btnHero" onclick="uploadHero()">☁️ Envoyer</button>
+          </div>
+        </div>
+      </div>
+      <!-- Bloc vidéo -->
+      <div id="heroVideoBlock" style="display:none;">
+        <p style="font-size:0.88rem;color:var(--texte-doux);margin-bottom:14px;">Format : MP4 (H.264) · Recommandé : 1920×1080px · Max 50 Mo · La vidéo sera muette et en boucle.</p>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <input type="file" id="heroVideoFile" accept="video/mp4,video/webm" style="display:none" onchange="prevHeroVideo(this)">
+          <video id="heroVideoPreview" muted loop style="max-width:200px;max-height:110px;display:none;border:1px solid rgba(139,26,26,0.15);object-fit:cover;"></video>
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;gap:10px;">
+              <button class="btn btn-g" onclick="document.getElementById('heroVideoFile').click()">📁 Choisir</button>
+              <button class="btn btn-p" id="btnHeroVideo" onclick="uploadHeroVideo()">☁️ Envoyer</button>
+            </div>
+            <div id="heroVideoProgress" style="display:none;font-size:0.82rem;color:var(--texte-doux);font-style:italic;"></div>
+            <div id="currentVideoUrl" style="display:none;font-size:0.8rem;color:var(--texte-doux);">Vidéo active : <a id="currentVideoLink" href="#" target="_blank" style="color:var(--brun);">voir ↗</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -618,7 +643,24 @@ async function uploadPhoto(input,slot){
 }
 async function rmPhoto(e,slot){e.stopPropagation();if(!confirm('Supprimer cette photo ?'))return;await sb.from('galerie').update({image_url:null}).eq('slot',slot);renderPhotoGrid();}
 
-// Hero photo
+// ── Hero mode toggle ──────────────────────────────────────────
+function setHeroMode(mode){
+  const imgBlock=document.getElementById('heroImageBlock');
+  const vidBlock=document.getElementById('heroVideoBlock');
+  const btnImg=document.getElementById('btnModeImg');
+  const btnVid=document.getElementById('btnModeVid');
+  if(mode==='video'){
+    imgBlock.style.display='none'; vidBlock.style.display='block';
+    btnVid.className='btn btn-p'; btnImg.className='btn btn-g';
+    sb.from('config').upsert({cle:'hero_mode',valeur:'video'});
+  } else {
+    imgBlock.style.display='block'; vidBlock.style.display='none';
+    btnImg.className='btn btn-p'; btnVid.className='btn btn-g';
+    sb.from('config').upsert({cle:'hero_mode',valeur:'image'});
+  }
+}
+
+// ── Hero photo ────────────────────────────────────────────────
 let heroFile=null;
 function prevHero(input){const f=input.files[0];if(!f)return;heroFile=f;const r=new FileReader();r.onload=e=>{const i=document.getElementById('heroPreview');i.src=e.target.result;i.style.display='block';};r.readAsDataURL(f);}
 async function uploadHero(){
@@ -629,10 +671,40 @@ async function uploadHero(){
   if(ue){setBtn('btnHero',false,'☁️ Envoyer');alert$('aCfg','err','Erreur : '+ue.message);return;}
   const{data:{publicUrl}}=sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
   await sb.from('config').upsert({cle:'hero_url',valeur:publicUrl});
+  await sb.from('config').upsert({cle:'hero_mode',valeur:'image'});
   setBtn('btnHero',false,'☁️ Envoyer');
   alert$('aCfg','ok','✔ Photo principale mise à jour pour tous les visiteurs.');
 }
 
+// ── Hero vidéo ─────────────────────────────────────────────────
+let heroVideoFile=null;
+function prevHeroVideo(input){
+  const f=input.files[0]; if(!f) return; heroVideoFile=f;
+  const preview=document.getElementById('heroVideoPreview');
+  preview.src=URL.createObjectURL(f); preview.style.display='block'; preview.play();
+  const mb=(f.size/1024/1024).toFixed(1);
+  const prog=document.getElementById('heroVideoProgress');
+  prog.textContent=`Fichier : ${f.name} (${mb} Mo)`; prog.style.display='block';
+}
+async function uploadHeroVideo(){
+  if(!heroVideoFile){alert$('aCfg','err','Choisissez d\'abord une vidéo.');return;}
+  if(heroVideoFile.size/1024/1024>50){alert$('aCfg','err','Fichier trop lourd (max 50 Mo).');return;}
+  setBtn('btnHeroVideo',true,'☁️ Envoi…');
+  const prog=document.getElementById('heroVideoProgress');
+  prog.textContent='⏳ Upload en cours, patientez…'; prog.style.display='block';
+  const ext=heroVideoFile.name.split('.').pop().toLowerCase();
+  const path=`hero/hero_video_${Date.now()}.${ext}`;
+  const{error:ue}=await sb.storage.from(STORAGE_BUCKET).upload(path,heroVideoFile,{upsert:true,contentType:heroVideoFile.type||'video/mp4'});
+  if(ue){setBtn('btnHeroVideo',false,'☁️ Envoyer');prog.textContent='';alert$('aCfg','err','Erreur : '+ue.message);return;}
+  const{data:{publicUrl}}=sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  await sb.from('config').upsert({cle:'hero_video_url',valeur:publicUrl});
+  await sb.from('config').upsert({cle:'hero_mode',valeur:'video'});
+  document.getElementById('currentVideoLink').href=publicUrl;
+  document.getElementById('currentVideoUrl').style.display='block';
+  setBtn('btnHeroVideo',false,'☁️ Envoyer');
+  prog.textContent='✔ Vidéo envoyée.';
+  alert$('aCfg','ok','✔ Vidéo hero mise à jour — visible immédiatement sur le site.');
+}
 // Config
 async function loadConfigForm(){
   const{data}=await sb.from('config').select('*');
@@ -643,7 +715,17 @@ async function loadConfigForm(){
   document.getElementById('cfTel').value=c.telephone||'';
   document.getElementById('cfEmail').value=c.email||'';
   document.getElementById('cfHor').value=c.horaires||'';
+  // Restaurer le mode hero
+  setHeroMode(c.hero_mode||'image');
   if(c.hero_url){const i=document.getElementById('heroPreview');i.src=c.hero_url;i.style.display='block';}
+  if(c.hero_video_url){
+    const preview=document.getElementById('heroVideoPreview');
+    preview.src=c.hero_video_url; preview.style.display='block'; preview.play();
+    document.getElementById('currentVideoLink').href=c.hero_video_url;
+    document.getElementById('currentVideoUrl').style.display='block';
+    document.getElementById('heroVideoProgress').textContent='Vidéo active (Supabase Storage).';
+    document.getElementById('heroVideoProgress').style.display='block';
+  }
 }
 async function saveAllConfig(){
   const{error}=await sb.from('config').upsert([
