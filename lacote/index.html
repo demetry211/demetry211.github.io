@@ -423,7 +423,11 @@ footer{background:var(--noir);padding:36px 72px;display:flex;align-items:center;
     <span class="section-label">Table</span>
     <h2 class="section-title">Réserver<br>votre table</h2>
     <p class="section-sub">Confirmez votre table en quelques clics via Zenchef, disponible 24h/24.</p>
-    
+    <div class="resa-detail">
+      <strong>Adresse :</strong> <span id="cfgAdresse">—</span><br>
+      <strong>Tél :</strong> <a id="cfgTelA" href="#">—</a><br>
+      <strong>Email :</strong> <a id="cfgEmailA" href="#">—</a>
+    </div>
     <a href="#" class="btn-resa" id="zenchefBtn" target="_blank">🗓 &nbsp;Réserver sur Zenchef</a>
   </div>
   <div class="resa-card reveal">
@@ -529,13 +533,13 @@ async function loadConfig(){
   const c={};data.forEach(r=>c[r.cle]=r.valeur);
   if(c.zenchef_url) document.getElementById('zenchefBtn').href=c.zenchef_url;
   const adr=c.adresse||'';
-  ['cardAdresse'].forEach(id=>document.getElementById(id).textContent=adr);
+  ['cfgAdresse','cardAdresse'].forEach(id=>document.getElementById(id).textContent=adr);
   document.getElementById('cAdresse').innerHTML=adr.replace(', ','<br>');
   const tel=c.telephone||'';const telHref='tel:'+tel.replace(/\s/g,'');
-  [[tel,telHref],['cardTelA',tel,telHref],['cTelA',tel,telHref]].forEach(([id,t,h])=>{
+  [['cfgTelA',tel,telHref],['cardTelA',tel,telHref],['cTelA',tel,telHref]].forEach(([id,t,h])=>{
     const el=document.getElementById(id);el.textContent=t;el.href=h;});
   const email=c.email||'';
-  [[email,'mailto:'+email],['cEmailA',email,'mailto:'+email]].forEach(([id,t,h])=>{
+  [['cfgEmailA',email,'mailto:'+email],['cEmailA',email,'mailto:'+email]].forEach(([id,t,h])=>{
     const el=document.getElementById(id);el.textContent=t;el.href=h;});
   const horaires=(c.horaires||'').split('|');
   document.getElementById('resaHoraires').innerHTML=horaires.map(l=>{
