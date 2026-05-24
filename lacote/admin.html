@@ -70,6 +70,8 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
 .fg input,.fg textarea,.fg select{width:100%;border:1px solid rgba(139,26,26,0.2);background:var(--creme);color:var(--texte);padding:11px 14px;font-family:'Cormorant',serif;font-size:1rem;outline:none;transition:border-color 0.25s;resize:vertical;}
 .fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--brun);}
 .form-hint{font-size:0.88rem;color:var(--texte-doux);margin-top:5px;font-style:italic;}
+[contenteditable][placeholder]:empty::before{content:attr(placeholder);color:var(--texte-doux);font-style:italic;pointer-events:none;}
+[contenteditable]:focus{border-color:rgba(139,26,26,0.5) !important;box-shadow:0 0 0 3px rgba(139,26,26,0.08);}
 
 /* BUTTONS */
 .btn{padding:10px 22px;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:0.68rem;letter-spacing:2px;text-transform:uppercase;transition:all 0.2s;display:inline-flex;align-items:center;gap:8px;border-radius:2px;}
@@ -420,6 +422,68 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
       </div>
       <button class="btn btn-p" onclick="saveAllConfig()">💾 Enregistrer tout</button>
     </div>
+
+    <!-- WYSIWYG SLOGAN -->
+    <div class="card">
+      <div class="card-title">Slogan de la bannière (Hero)</div>
+      <p style="font-size:0.9rem;color:var(--texte-doux);margin-bottom:20px;font-style:italic;">Modifiez le texte affiché sur la photo/vidéo de la page d'accueil. L'aperçu est en temps réel.</p>
+      <div id="aSlo" class="alert"></div>
+
+      <!-- Champ 1 : eyebrow (surtitre) -->
+      <div class="fg" style="margin-bottom:18px;">
+        <label>Surtitre <span style="font-size:0.75rem;color:var(--texte-doux);font-weight:300;">(petite ligne au-dessus du titre)</span></label>
+        <input type="text" id="sloEyebrow" placeholder="Ex : Burgers au feu · Marseille" oninput="updateSloganPreview()">
+      </div>
+
+      <!-- Champ 2 : titre principal avec WYSIWYG -->
+      <div class="fg" style="margin-bottom:8px;">
+        <label>Titre principal <span style="font-size:0.75rem;color:var(--texte-doux);font-weight:300;">(sélectionnez du texte pour le mettre en italique/gras)</span></label>
+        <!-- Barre d'outils -->
+        <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+          <button type="button" class="btn btn-g" style="padding:5px 12px;font-size:0.75rem;font-weight:700;" onclick="wFmt('bold')" title="Gras"><b>G</b></button>
+          <button type="button" class="btn btn-g" style="padding:5px 12px;font-size:0.75rem;font-style:italic;" onclick="wFmt('italic')" title="Italique"><i>I</i></button>
+          <button type="button" class="btn btn-g" style="padding:5px 12px;font-size:0.75rem;" onclick="wFmt('removeFormat')" title="Effacer la mise en forme">✕</button>
+          <button type="button" class="btn btn-g" style="padding:5px 12px;font-size:0.75rem;" onclick="wInsert('<br>')" title="Saut de ligne">↵ Retour à la ligne</button>
+        </div>
+        <div id="sloTitle"
+          contenteditable="true"
+          oninput="updateSloganPreview()"
+          style="
+            min-height:64px;padding:12px 14px;
+            border:1px solid rgba(139,26,26,0.2);
+            border-radius:2px;background:var(--blanc);
+            font-family:'Libre Baskerville',serif;
+            font-size:1.1rem;line-height:1.4;color:var(--texte);
+            outline:none;
+          "
+          placeholder="Ex : Le grill, la fonte, le bon goût."
+        >Le grill,<br><em>la fonte,</em><br>le bon goût.</div>
+      </div>
+      <p style="font-size:0.78rem;color:var(--texte-doux);margin-bottom:18px;">💡 Le texte en <em>italique</em> s'affichera dans la couleur accentuée du thème.</p>
+
+      <!-- Champ 3 : description -->
+      <div class="fg" style="margin-bottom:20px;">
+        <label>Description <span style="font-size:0.75rem;color:var(--texte-doux);font-weight:300;">(sous le titre, optionnel)</span></label>
+        <textarea id="sloDesc" rows="3" placeholder="Courte description du restaurant…" oninput="updateSloganPreview()" style="resize:vertical;"></textarea>
+      </div>
+
+      <!-- Aperçu temps réel -->
+      <div style="margin-bottom:20px;">
+        <label style="font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--brun);display:block;margin-bottom:10px;">Aperçu</label>
+        <div style="
+          background:linear-gradient(to right,rgba(10,5,2,0.88) 0%,rgba(10,5,2,0.6) 60%,rgba(10,5,2,0.3) 100%),
+          linear-gradient(135deg,#3D1A0A,#7A3010 40%,#5A2A10);
+          padding:28px 32px;border-radius:2px;min-height:140px;
+          display:flex;flex-direction:column;justify-content:center;
+        ">
+          <p id="prevEyebrow" style="font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:4px;text-transform:uppercase;color:rgba(242,235,217,0.6);margin-bottom:12px;"></p>
+          <div id="prevTitle" style="font-family:'Libre Baskerville',serif;font-size:1.6rem;line-height:1.15;color:#FDFAF4;margin-bottom:12px;"></div>
+          <p id="prevDesc" style="font-size:0.85rem;font-weight:300;line-height:1.6;color:rgba(242,235,217,0.72);max-width:380px;"></p>
+        </div>
+      </div>
+
+      <button class="btn btn-p" onclick="saveSlogan()">💾 Enregistrer le slogan</button>
+    </div>
   </div>
 
   <!-- COMPTE -->
@@ -726,6 +790,49 @@ async function loadConfigForm(){
     document.getElementById('heroVideoProgress').textContent='Vidéo active (Supabase Storage).';
     document.getElementById('heroVideoProgress').style.display='block';
   }
+  // Restaurer le slogan
+  if(c.hero_eyebrow) document.getElementById('sloEyebrow').value=c.hero_eyebrow;
+  if(c.hero_title)   document.getElementById('sloTitle').innerHTML=c.hero_title;
+  if(c.hero_desc)    document.getElementById('sloDesc').value=c.hero_desc;
+  updateSloganPreview();
+}
+
+// ── WYSIWYG Slogan ────────────────────────────────────────────
+function wFmt(cmd){ document.execCommand(cmd, false, null); updateSloganPreview(); }
+function wInsert(html){
+  const sel=window.getSelection();
+  if(!sel.rangeCount) return;
+  const range=sel.getRangeAt(0);
+  range.deleteContents();
+  const el=document.createElement('div');
+  el.innerHTML=html;
+  const frag=document.createDocumentFragment();
+  let node, lastNode;
+  while((node=el.firstChild)){ lastNode=frag.appendChild(node); }
+  range.insertNode(frag);
+  if(lastNode){ const r=range.cloneRange(); r.setStartAfter(lastNode); r.collapse(true); sel.removeAllRanges(); sel.addRange(r); }
+  updateSloganPreview();
+}
+function updateSloganPreview(){
+  const eyebrow = document.getElementById('sloEyebrow').value;
+  const titleHTML = document.getElementById('sloTitle').innerHTML;
+  const desc = document.getElementById('sloDesc').value;
+  document.getElementById('prevEyebrow').textContent = eyebrow;
+  // Reproduire le style em (italique coloré) dans l'aperçu
+  document.getElementById('prevTitle').innerHTML = titleHTML.replace(/<em>/g,'<em style="font-style:italic;color:#C47A7A;">');
+  document.getElementById('prevDesc').textContent = desc;
+}
+async function saveSlogan(){
+  const eyebrow = document.getElementById('sloEyebrow').value.trim();
+  const title   = document.getElementById('sloTitle').innerHTML.trim();
+  const desc    = document.getElementById('sloDesc').value.trim();
+  if(!title){ alert$('aSlo','err','Le titre ne peut pas être vide.'); return; }
+  const{error}=await sb.from('config').upsert([
+    {cle:'hero_eyebrow', valeur:eyebrow},
+    {cle:'hero_title',   valeur:title},
+    {cle:'hero_desc',    valeur:desc},
+  ]);
+  error ? alert$('aSlo','err','Erreur : '+error.message) : alert$('aSlo','ok','✔ Slogan mis à jour — visible immédiatement sur le site.');
 }
 async function saveAllConfig(){
   const{error}=await sb.from('config').upsert([
