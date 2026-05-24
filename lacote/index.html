@@ -254,7 +254,27 @@ nav.shadow{box-shadow:0 4px 24px rgba(0,0,0,0.08);}
 .gallery-cell-inner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;height:100%;width:100%;}
 .gallery-cell-icon{font-size:2.2rem;opacity:0.2;}
 .gallery-cell-label{font-family:'Jost',sans-serif;font-size:0.6rem;letter-spacing:3px;text-transform:uppercase;color:var(--texte-doux);opacity:0.5;}
-#reservation{background:var(--creme);padding:100px 72px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+#reservation{
+  background:var(--creme);
+  background-size:cover;
+  background-position:center;
+  background-attachment:fixed;
+  position:relative;
+  padding:100px 72px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;
+}
+/* Overlay semi-transparent quand une image est définie */
+#reservation.has-bg::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,
+    rgba(242,235,217,0.96) 0%,
+    rgba(242,235,217,0.92) 40%,
+    rgba(242,235,217,0.75) 70%,
+    rgba(242,235,217,0.5) 100%
+  );
+  pointer-events:none;z-index:0;
+}
+#reservation > *{position:relative;z-index:1;}
 .resa-text .section-title,.resa-text .section-label{text-align:left;}
 .resa-text .section-sub{text-align:left;margin:0 0 32px;}
 .resa-detail{font-size:1rem;color:var(--texte-doux);line-height:2.1;margin-bottom:32px;}
@@ -548,6 +568,12 @@ async function loadConfig(){
   if(c.hero_eyebrow) document.querySelector('.hero-eyebrow').textContent=c.hero_eyebrow;
   if(c.hero_title)   document.querySelector('.hero-title').innerHTML=c.hero_title;
   if(c.hero_desc)    document.querySelector('.hero-desc').textContent=c.hero_desc;
+  // Arrière-plan section Réservation
+  if(c.resa_bg_url){
+    const sec=document.getElementById('reservation');
+    sec.style.backgroundImage=`url(${c.resa_bg_url})`;
+    sec.classList.add('has-bg');
+  }
 }
 
 document.querySelectorAll('.reveal').forEach(el=>

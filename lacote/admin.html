@@ -484,6 +484,43 @@ body{font-family:'Cormorant',serif;background:var(--creme-alt);color:var(--texte
 
       <button class="btn btn-p" onclick="saveSlogan()">💾 Enregistrer le slogan</button>
     </div>
+
+    <!-- ARRIÈRE-PLAN RÉSERVATION -->
+    <div class="card">
+      <div class="card-title">Arrière-plan « Réserver votre table »</div>
+      <p style="font-size:0.9rem;color:var(--texte-doux);margin-bottom:20px;font-style:italic;">
+        Image affichée en fond de la section réservation. Un voile crème est appliqué automatiquement pour garder le texte lisible.
+      </p>
+      <div id="aResa" class="alert"></div>
+
+      <!-- Aperçu actuel -->
+      <div style="margin-bottom:20px;">
+        <label style="font-size:0.65rem;letter-spacing:3px;text-transform:uppercase;color:var(--brun);display:block;margin-bottom:10px;">Aperçu</label>
+        <div id="resaBgPreviewWrap" style="
+          position:relative;height:140px;border-radius:2px;overflow:hidden;
+          background:var(--creme);border:1px solid rgba(139,26,26,0.12);
+          display:flex;align-items:center;justify-content:center;
+        ">
+          <img id="resaBgPreviewImg" src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;">
+          <div id="resaBgOverlay" style="position:absolute;inset:0;background:linear-gradient(to right,rgba(242,235,217,0.96),rgba(242,235,217,0.75));display:none;"></div>
+          <div style="position:relative;z-index:1;text-align:center;">
+            <p style="font-family:'Libre Baskerville',serif;font-size:1.1rem;color:var(--brun);">Réserver votre table</p>
+            <p style="font-size:0.8rem;color:var(--texte-doux);font-style:italic;margin-top:4px;">Aperçu du rendu final</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload -->
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+        <input type="file" id="resaBgFile" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="prevResaBg(this)">
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-g" onclick="document.getElementById('resaBgFile').click()">📁 Choisir une image</button>
+          <button class="btn btn-p" id="btnResaBg" onclick="uploadResaBg()">☁️ Envoyer</button>
+          <button class="btn btn-g" id="btnResaBgReset" onclick="resetResaBg()" style="display:none;color:#c62828;background:#fce4e4;border:none;">🗑 Supprimer</button>
+        </div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--texte-doux);margin-top:10px;font-style:italic;">Formats : JPG, PNG, WebP · Recommandé : 1600×900px ou plus</p>
+    </div>
   </div>
 
   <!-- COMPTE -->
@@ -795,6 +832,13 @@ async function loadConfigForm(){
   if(c.hero_title)   document.getElementById('sloTitle').innerHTML=c.hero_title;
   if(c.hero_desc)    document.getElementById('sloDesc').value=c.hero_desc;
   updateSloganPreview();
+  // Restaurer l'image de fond réservation
+  if(c.resa_bg_url){
+    const img=document.getElementById('resaBgPreviewImg');
+    img.src=c.resa_bg_url; img.style.display='block';
+    document.getElementById('resaBgOverlay').style.display='block';
+    document.getElementById('btnResaBgReset').style.display='inline-flex';
+  }
 }
 
 // ── WYSIWYG Slogan ────────────────────────────────────────────
@@ -833,6 +877,41 @@ async function saveSlogan(){
     {cle:'hero_desc',    valeur:desc},
   ]);
   error ? alert$('aSlo','err','Erreur : '+error.message) : alert$('aSlo','ok','✔ Slogan mis à jour — visible immédiatement sur le site.');
+}
+
+// ── Arrière-plan section Réservation ─────────────────────────
+let resaBgFile=null;
+function prevResaBg(input){
+  const f=input.files[0]; if(!f) return; resaBgFile=f;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=document.getElementById('resaBgPreviewImg');
+    img.src=e.target.result; img.style.display='block';
+    document.getElementById('resaBgOverlay').style.display='block';
+    document.getElementById('btnResaBgReset').style.display='inline-flex';
+  };
+  reader.readAsDataURL(f);
+}
+async function uploadResaBg(){
+  if(!resaBgFile){alert$('aResa','err','Choisissez d\'abord une image.');return;}
+  setBtn('btnResaBg',true,'☁️ Envoi…');
+  const path=`resa/resa_bg_${Date.now()}.${resaBgFile.name.split('.').pop()}`;
+  const{error:ue}=await sb.storage.from(STORAGE_BUCKET).upload(path,resaBgFile,{upsert:true,contentType:resaBgFile.type});
+  if(ue){setBtn('btnResaBg',false,'☁️ Envoyer');alert$('aResa','err','Erreur : '+ue.message);return;}
+  const{data:{publicUrl}}=sb.storage.from(STORAGE_BUCKET).getPublicUrl(path);
+  await sb.from('config').upsert({cle:'resa_bg_url',valeur:publicUrl});
+  setBtn('btnResaBg',false,'☁️ Envoyer');
+  document.getElementById('btnResaBgReset').style.display='inline-flex';
+  alert$('aResa','ok','✔ Image de fond mise à jour — visible immédiatement sur le site.');
+}
+async function resetResaBg(){
+  if(!confirm('Supprimer l\'image de fond de la section réservation ?')) return;
+  await sb.from('config').delete().eq('cle','resa_bg_url');
+  document.getElementById('resaBgPreviewImg').style.display='none';
+  document.getElementById('resaBgOverlay').style.display='none';
+  document.getElementById('btnResaBgReset').style.display='none';
+  resaBgFile=null;
+  alert$('aResa','ok','✔ Image supprimée — fond uni restauré.');
 }
 async function saveAllConfig(){
   const{error}=await sb.from('config').upsert([
